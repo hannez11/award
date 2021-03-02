@@ -1,0 +1,72 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block head_title %}
+  Experiment Overview
+{% endblock %}
+
+{% block title %}
+  Experiment Overview 
+{% endblock %}
+
+{% block content %}
+
+<p>The experiment consists of <strong>three parts.</strong> Please read the following procedure carefully. 
+</p>
+
+<br>
+
+<ul class="list-group">
+    <li class="list-group-item list-group-item-secondary" align="justify"><strong>Part 1: Lottery-Task</strong><br>
+        First, you will receive a lottery task. Its payout is an additional part of your compensation. The lottery is independent from this HIT’s main-task. You will find detailed instructions on the next page.
+        </li>
+</ul>
+
+<br>
+  
+<ul class="list-group">
+    <li class="list-group-item list-group-item-secondary" align="justify"><strong>Part 2: Main-Task</strong><br>
+        In the main task you are taking on the role of a project manager at the company CleverClean Inc. During the experiment you will receive several sets of information and will be asked to make various decisions.
+
+      </li>
+</ul>
+
+<br>
+
+<ul class="list-group">
+    <li class="list-group-item list-group-item-secondary" align="justify"><strong>Part 3: Questionnaire</strong><br>
+        Lastly, you will be asked to answer some questions about your made decisions and your person at the end of the experiment. There are <strong>no right or wrong</strong> answers. Therefore, please be honest and read them carefully. Your answers have no influence on your compensation. All data will be treated <strong>anonymously </strong>by the experiment administrator. 
+        </li>
+</ul>
+
+<br>
+
+<br>
+<br>
+
+</div>
+
+<form ... onsubmit="return checkForm(this);">
+  
+  <p><input id="field_terms" onchange="this.setCustomValidity(validity.valueMissing ? 'Please indicate that you understand and accept the abovementioned instructions.' : '');" type="checkbox" required name="terms"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>  I have read the overview.</strong></p>
+  
+  <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="col-md-1"><div style="text-align:right">
+        <button class="nexttab btn-primary btn next" id="nextbutton">Next</button>
+      </div>
+    </div>
+
+
+
+{% endblock %}
