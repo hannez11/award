@@ -21,14 +21,15 @@ class fail(Page):
         return self.player.prizewheel!=3 
 
 class overview(Page):
-    form_model = "player"
+    pass
 
 class lottery1(Page):
     form_model = "player"
+    form_fields = ["timer_lottery1"]
 
 class lottery2(Page):
     form_model = "player"
-    form_fields = ["lottery_choice"]
+    form_fields = ["lottery_choice", "timer_lottery2"]
 
     def vars_for_template(self): #to create risk lottery bootstrap table
         list1 = Constants.lottery_gamble_successrate
@@ -64,7 +65,7 @@ class Experiment_instructions_Control(Page):
 
 class Quiz_FA_1(Page):
     form_model = "player"
-    form_fields = ["first_task", "feedback", "manipulation_A1", "when_FA", "definition", "delay", "what_FA", "example", "variable", "compensation_FA", "dollars", "timer_quiz"]
+    form_fields = ["first_task", "feedback", "when_FA", "definition", "delay", "what_FA", "example", "variable", "compensation_FA", "dollars", "manipulation_A1", "timer_quiz"]
 
     
     def first_task_error_message(self, value):
@@ -129,7 +130,7 @@ class Quiz_FA_1(Page):
             return 'Your answer is not correct. Please read the experiment instructions again.'
    
     def compensation_FA_error_message(self, value):
-        print('value is', value)
+        # print('value is', value)
         if value != "['1', '2', '3', '4']":
             self.player.compensation_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
@@ -140,7 +141,7 @@ class Quiz_FA_1(Page):
 
 class Quiz_FA_2(Page):
     form_model = "player"
-    form_fields = ["first_task", "feedback", "manipulation_A2", "when_FA", "definition", "delay", "what_FA", "example", "variable", "compensation_FA", "dollars", "timer_quiz"]
+    form_fields = ["first_task", "feedback", "when_FA", "definition", "delay", "what_FA", "example", "variable", "compensation_FA", "dollars", "manipulation_A2", "timer_quiz"]
     
     def first_task_error_message(self, value):
         #print('value is', value) #value equals selected radiobutton value of question 1 after submission
@@ -203,7 +204,7 @@ class Quiz_FA_2(Page):
             self.player.quiz_totalwronganswers += 1
             return 'Your answer is not correct. Please read the experiment instructions again.'   
     def compensation_FA_error_message(self, value):
-        print('value is', value)
+        # print('value is', value)
         if value != "['1', '2', '3', '4']":
             self.player.compensation_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
@@ -214,7 +215,7 @@ class Quiz_FA_2(Page):
 
 class Quiz_FA_3(Page):
     form_model = "player"
-    form_fields = ["first_task", "feedback", "manipulation_A3", "when_FA", "definition", "delay", "what_FA", "example", "variable", "compensation_FA", "dollars", "timer_quiz"]
+    form_fields = ["first_task", "feedback", "when_FA", "definition", "delay", "what_FA", "example", "variable", "compensation_FA", "dollars", "manipulation_A3", "timer_quiz"]
     
     def first_task_error_message(self, value):
         #print('value is', value) #value equals selected radiobutton value of question 1 after submission
@@ -242,7 +243,7 @@ class Quiz_FA_3(Page):
             return 'Your answer is not correct. Please read the experiment instructions again.'
     def example_error_message(self, value):
         # print('value is', value, type(value))
-        if not (value[0:3] == "6,0" or value == "6" or value[0:3] == "6.0"):
+        if not (value[0:3] == "6,0" or value == "6" or value[0:3] == "6.0" or value == "6.0m"):
             self.player.example_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
             return 'Your answer is not correct. Please read the experiment instructions again.'
@@ -254,7 +255,7 @@ class Quiz_FA_3(Page):
             return 'Your answer is not correct. Please read the experiment instructions again.'
     def dollars_error_message(self, value):
         # print('value is', value)
-        if not (value[0:4] == "3,50" or value == "3,5" or value == "3.50" or value == "3.5"):
+        if not (value[0:4] == "3,50" or value == "3,5" or value == "3.50" or value == "3.5" or value == "$3.5" or value == "$3.50"):
             self.player.dollars_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
             return 'Your answer is not correct. Please read the experiment instructions again.'
@@ -277,7 +278,7 @@ class Quiz_FA_3(Page):
             self.player.quiz_totalwronganswers += 1
             return 'Your answer is not correct. Please read the experiment instructions again.'
     def compensation_FA_error_message(self, value):
-        print('value is', value)
+        # print('value is', value)
         if value != "['1', '2', '3', '4']":
             self.player.compensation_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
@@ -321,7 +322,7 @@ class Quiz_Control(Page):
             self.player.quiz_totalwronganswers += 1
             return 'Your answer is not correct. Please read the experiment instructions again.'
     def compensation_Co_error_message(self, value):
-        print('value is', value)
+        # print('value is', value)
         if value != "['1', '2', '3']":
             self.player.compensation_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
@@ -752,7 +753,7 @@ class PEQ_Control_m5(Page):
 
 class PEQ_Control_m6(Page):
     form_model = "player"
-    form_fields = ["pq29", "pq30", "pq32", "pq31", "pq31a"]
+    form_fields = ["pq29", "pq32", "pq31", "pq31a"]
 
     def is_displayed(self):
         return self.player.initial_decision == "Mob Robot" and self.subsession.framing == "C0"
@@ -794,7 +795,7 @@ class PEQ_Control_v5(Page):
 
 class PEQ_Control_v6(Page):
     form_model = "player"
-    form_fields = ["pq29", "pq30", "pq32", "pq31", "pq31a"]
+    form_fields = ["pq29", "pq32", "pq31", "pq31a"]
 
     def is_displayed(self):
         return self.player.initial_decision == "Vacuum Robot" and self.subsession.framing == "C0"

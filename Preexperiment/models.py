@@ -122,7 +122,9 @@ class Player(BasePlayer):
     dollars_answers = models.StringField(initial="FirstTry")
     variable_c_answers = models.StringField(initial="FirstTry")
 
-    #timers MÜSSEN ANGEPASST WERDEN 25feb
+    #timers
+    timer_lottery1 = models.StringField()
+    timer_lottery2 = models.StringField()
     timer_instructions = models.StringField()
     timer_quiz = models.StringField() # has to be a stringfield, since multiple attempts are possible which have to be stored in an array. intfields cant easily store arrays
     timer_initialdecision = models.StringField()
@@ -147,17 +149,17 @@ class Player(BasePlayer):
     # ip_address = models.StringField()
     # browser = models.StringField()
 
-    first_task=create_mc("My first task as a leading manager of the projects department is to...", [[1,"develop a new product idea"],[2,"select two innovation projects"], [3,"select one of two potential innovation projects"]])
+    first_task=create_mc("My first task as a leading manager of the projects department is to...", [[1,"... develop a new product idea."],[2,"... select two innovation projects."], [3,"... select one of two potential innovation projects."]])
 
-    feedback=create_mc("Please select the right answer:", [[1,"My decisions might be reviewed by the experimental administrator who then sends me written feedback."],[2,"My decisions will not reviewed by anyone."], [3,"My decisions are not relevant and can be made arbitrarily."]])
+    feedback=create_mc("Please select the right answer:", [[1,"My decisions might be reviewed by the experimental administrator who then sends me written feedback."],[2,"My decisions will not reviewed by anyone."], [3,"My decisions do not influence my compensation."]])
 
-    manipulation_A1=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to employees who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big."],[1,"... motivate themselves and others in their project team to strive for high effort even when the project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]])
+    manipulation_A1=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to employees who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]])
 
-    manipulation_A2=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to employees who have the courage to...", [[2,"... 'pull the plug' of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others in their project team to strive for high effort even when the project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
+    manipulation_A2=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to employees who have the courage to...", [[2,"... 'pull the plug' of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
 
-    manipulation_A3=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to employees who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big. Additionally, employees should also have the courage to ”pull the plug” of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others in their project team to strive for high effort even when the project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
+    manipulation_A3=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to employees who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big. Additionally, employees should also have the courage to ”pull the plug” of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
 
-    when_FA=create_mc("When do I receive a Failure Award?", [[1,"No matter what I will do in the experiment, I will always receive a Failure Award with 100% certainty by the end of the experiment"],[2,"In case I keep investing in a failing project which ends up generating high returns."], [3,"In case I take value adding risks but my project ends up failing and I deliberately decide for project discontinuation."]])
+    when_FA=create_mc("When do I receive a Failure Award?", [[1,"I will always receive a Failure Award with 100% certainty by the end of the experiment."],[2,"In case I keep investing in a failing project which ends up generating high returns."], [3,"In case I take value adding risks but my project ends up failing and I deliberately decide for project discontinuation."]])
 
     definition=create_mc("How does CleverClean define a failing project?", [[1,"A project is defined as failing in case the management board itself announces that the project is failing."],[2,"A project is defined as failing when it generates less expected value than initially predicted and less than the expected value of an alternative project."], [3,"A project is defined as failing when it generates more expected value than initially predicted and more than the expected value of an alternative project."]])
 
@@ -190,9 +192,9 @@ class Player(BasePlayer):
 
     pq4=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="According to CleverClean, continuing the project meant to invest more money in a failing project.")
 
-    pq5=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The Failure Award influenced my recommendation to the management board as follows: I was more tending to... ")
+    pq5=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The Failure Award influenced my final recommendation to the management board as follows: I was more tending to... ")
 
-    pq6m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="How would you characterize your project decision? The project Smart Mob Robot poses...")
+    pq6m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="How would you characterize your project decision? Choosing the project Smart Mob Robot poses...")
 
     pq6v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="How would you characterize your project decision? The project Smart Vacuum Robot poses...")
 
