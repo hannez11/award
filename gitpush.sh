@@ -1,5 +1,5 @@
 #!/bin/sh
-cd C:/Users/hannez/award
+cd C:/Users/g21728/award
 git add .
 git commit -am "made changes"
 git push --force

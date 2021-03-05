@@ -133,18 +133,29 @@ class Player(BasePlayer):
     timer_subrecommendation2 = models.StringField()
     timer_sub2choice = models.StringField()
 
-    starttime = models.StringField() #get time of participant when welcome page is loaded
-    endtime = models.StringField() #get time of participant when last page is loaded
-    def get_time(self, start_or_end):
-        if start_or_end == "start":
-            self.starttime = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        else:
-            self.endtime = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    start_mainpart = models.StringField() #get time of participant when welcome page is loaded
+    end_mainpart = models.StringField() #get time of participant when last page is loaded
+    start_peq = models.StringField()
+    end_peq = models.StringField()
+    start_instructions = models.StringField()
+    end_instructions = models.StringField()
+    start_total = models.StringField()
+    end_total = models.StringField()
+    def get_time(self, start_end_variable): #e.g. self.player.get_time("start_total")
+        print(self.start_total)
+        start_end_variable = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        print(start_end_variable)
+        self.start_total = start_end_variable
+        print(self.start_total)
 
-    timespent = models.StringField() #get total time spent
-    def time_spent(self):
-        duration = datetime.datetime.strptime(self.endtime, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.starttime, "%d/%m/%Y %H:%M:%S")
-        self.timespent = f"{duration.total_seconds():.0f}sec; {float(duration.total_seconds() / 60):.2f}min"
+    timespent_mainpart = models.StringField() #get total time spent
+    timespent_peq = models.StringField()
+    timespent_instructions = models.StringField()
+    timespent_total = models.StringField()
+    def time_spent(self, starttime, endtime, timespent_variable): #e.g. self.player.time_spent(self, start_mainpart, end_mainpart, timespent_mainpart)
+        difference = datetime.datetime.strptime(self.endtime, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.starttime, "%d/%m/%Y %H:%M:%S")
+        duration = difference.total_seconds()
+        self.timespent_variable = f"{float(duration / 60):.2f}" #in minutes f"{duration:.0f}sec; {float(duration / 60):.2f}min"
 
     # ip_address = models.StringField()
     # browser = models.StringField()

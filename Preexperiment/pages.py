@@ -8,8 +8,11 @@ import random #for payout determination
 class welcome(Page):
     form_model = "player"
 
+    def after_all_players_arrive(self):
+        print("check")
+
     def before_next_page(self):
-        self.player.get_time("start") #get start time
+        self.player.get_time(self.player.start_total) #get start time
 
 
 class prizewheel(Page):
@@ -43,7 +46,8 @@ class lottery2(Page):
         # print("global_lottery_choice" + str(self.participant.vars["global_lottery_choice"]))
 
 class after_lottery(Page):
-    pass
+    def before_next_page(self):
+        self.player.get_time("start_instructions") #get start time
 
 class Experiment_instructions_A1(Page):
     form_model = "player"
@@ -51,17 +55,30 @@ class Experiment_instructions_A1(Page):
     def is_displayed(self):
         return self.subsession.framing == "A1" 
 
+    def before_next_page(self):
+        self.player.get_time("end_instructions") #get start time
+        self.player.time_spent(self, start_instructions, end_instructions, timespent_instructions)
+
 class Experiment_instructions_A2(Page):
     def is_displayed(self):
         return self.subsession.framing == "A2" 
+    def before_next_page(self):
+        self.player.get_time("end_instructions") #get start time
+        self.player.time_spent(self, start_instructions, end_instructions, timespent_instructions)
 
 class Experiment_instructions_A3(Page):
     def is_displayed(self):
         return self.subsession.framing == "A3" 
+    def before_next_page(self):
+        self.player.get_time("end_instructions") #get start time
+        self.player.time_spent(self, start_instructions, end_instructions, timespent_instructions)
 
 class Experiment_instructions_Control(Page):
     def is_displayed(self):
         return self.subsession.framing == "C0" 
+    def before_next_page(self):
+        self.player.get_time("end_instructions") #get start time
+        self.player.time_spent(self, start_instructions, end_instructions, timespent_instructions)
 
 class Quiz_FA_1(Page):
     form_model = "player"
@@ -333,7 +350,8 @@ class Quiz_Control(Page):
 
 
 class Quiz_completed(Page):
-    pass
+    def before_next_page(self):
+        self.player.get_time("start_mainpart") #get start time
 
 class Project_2_A1(Page):
     def is_displayed(self):
