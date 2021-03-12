@@ -41,31 +41,18 @@
 
 <br>
 
-<br>
-<br>
-
 </div>
 
-<form ... onsubmit="return checkForm(this);">
-  
-  <p><input id="field_terms" onchange="this.setCustomValidity(validity.valueMissing ? 'Please indicate that you understand and accept the abovementioned instructions.' : '');" type="checkbox" required name="terms"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>  I have read the overview.</strong></p>
-  
-  <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-1"></div>
-      <div class="col-md-1"></div>
-      <div class="col-md-1"></div>
-      <div class="col-md-1"></div>
-      <div class="col-md-1"></div>
-      <div class="col-md-1"></div>
-      <div class="col-md-1"></div>
-      <div class="col-md-1"></div>
-      <div class="col-md-1"></div>
-      <div class="col-md-1"></div>
-      <div class="col-md-1"><div style="text-align:right">
-        <button class="nexttab btn-primary btn next" id="nextbutton">Next</button>
-      </div>
-    </div>
+<div class="form-check required">
+  <label class="form-check-label  field-initial_checkbox" for="check">
+    <input id="check" type="checkbox" required="" class="form-check-input">
+    <b>I have read the overview.</b>
+  </label>
+</div>
+
+<div style="text-align:right">
+  <button class="btn btn-primary" id="nextbutton">Continue</button>
+</div>
 
 
 

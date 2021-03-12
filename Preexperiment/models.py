@@ -70,7 +70,7 @@ def create_mc(mc,choiceslist): #same as quiz function
 
 class Player(BasePlayer):
 
-    prizewheel=create_mc("What is the expected value of this prize wheel if you spin it one time?", [[1,"$0.00"],[2,"$0.25"], [3,"$1.25"], [4,"$1.50"], [5,"$2.00"], [6,"$5.75"], [7,"$6.00"], [8,"$8.00"], [9,"$10.00"]])
+    prizewheel=create_mc("What is the expected value of this prize wheel?", [[1,"$0.00"],[2,"$0.25"], [3,"$1.25"], [4,"$1.50"], [5,"$2.00"], [6,"$5.75"], [7,"$6.00"], [8,"$8.00"], [9,"$10.00"]])
 
     lottery_choice = models.PositiveIntegerField(choices=[[i, f"Scenario {i}"] for i in range(1,16)], widget=widgets.RadioSelect) #Lottery page; reuse in main experiment to determine payout
 
@@ -86,7 +86,7 @@ class Player(BasePlayer):
     lottery_payout = models.CurrencyField()
     total_payout = models.CurrencyField() #store player total payout
 
-    #mob vs vacuum
+    #mop vs vacuum
     initial_choices = models.StringField() # records all button clicks on the two initial options of a participant
     initial_decision = models.StringField() # final initial decision
 
@@ -133,29 +133,75 @@ class Player(BasePlayer):
     timer_subrecommendation2 = models.StringField()
     timer_sub2choice = models.StringField()
 
-    start_mainpart = models.StringField() #get time of participant when welcome page is loaded
-    end_mainpart = models.StringField() #get time of participant when last page is loaded
+    start_mainpart = models.StringField() 
+    end_mainpart = models.StringField() 
     start_peq = models.StringField()
     end_peq = models.StringField()
     start_instructions = models.StringField()
     end_instructions = models.StringField()
-    start_total = models.StringField()
-    end_total = models.StringField()
-    def get_time(self, start_end_variable): #e.g. self.player.get_time("start_total")
-        print(self.start_total)
-        start_end_variable = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        print(start_end_variable)
-        self.start_total = start_end_variable
-        print(self.start_total)
+    start_initialdecision = models.StringField()
+    end_initialdecision = models.StringField()
+    start_total = models.StringField() #get time of participant when welcome page is loaded
+    end_total = models.StringField() #get time of participant when last page is loaded
+    def get_time(self, start_or_end): #specify pages.py, eg: before_next_page(self): self.player.get_time("end_mainpart")
+        if start_or_end == "start_mainpart":
+            self.start_mainpart = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        elif start_or_end == "end_mainpart":
+            self.end_mainpart = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+            difference = datetime.datetime.strptime(self.end_mainpart, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_mainpart, "%d/%m/%Y %H:%M:%S")
+            duration = difference.total_seconds()
+            self.timespent_mainpart = f"{float(duration):.0f}" #in minutes; for seconds: f"{duration:.0f}sec; {float(duration / 60):.2f}min"
+        elif start_or_end == "start_peq":
+            self.start_peq = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        elif start_or_end == "end_peq":
+            self.end_peq = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+            difference = datetime.datetime.strptime(self.end_peq, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_peq, "%d/%m/%Y %H:%M:%S")
+            duration = difference.total_seconds()
+            self.timespent_peq = f"{float(duration):.0f}" 
+        elif start_or_end == "start_instructions":
+            self.start_instructions = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        elif start_or_end == "end_instructions":
+            self.end_instructions = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+            difference = datetime.datetime.strptime(self.end_instructions, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_instructions, "%d/%m/%Y %H:%M:%S")
+            duration = difference.total_seconds()
+            self.timespent_instructions = f"{float(duration):.0f}" 
+        elif start_or_end == "start_initialdecision":
+            self.start_initialdecision = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        elif start_or_end == "end_initialdecision":
+            self.end_initialdecision = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            
+            difference = datetime.datetime.strptime(self.end_initialdecision, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_initialdecision, "%d/%m/%Y %H:%M:%S")
+            duration = difference.total_seconds()
+            self.timespent_initialdecision = f"{float(duration):.0f}" 
+        elif start_or_end == "start_total":
+            self.start_total = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        elif start_or_end == "end_total":
+            self.end_total = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+            difference = datetime.datetime.strptime(self.end_total, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_total, "%d/%m/%Y %H:%M:%S")
+            duration = difference.total_seconds()
+            self.timespent_total = f"{float(duration):.0f}" 
+
+
+    # def get_time2(self, start_end_variable): #e.g. self.player.get_time("start_total")
+    #     print(f"model before {self.end_total}")
+    #     start_end_variable = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    #     self.endtotal_total = start_end_variable
+    #     print(f"model after {self.end_total}")
 
     timespent_mainpart = models.StringField() #get total time spent
     timespent_peq = models.StringField()
     timespent_instructions = models.StringField()
     timespent_total = models.StringField()
-    def time_spent(self, starttime, endtime, timespent_variable): #e.g. self.player.time_spent(self, start_mainpart, end_mainpart, timespent_mainpart)
-        difference = datetime.datetime.strptime(self.endtime, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.starttime, "%d/%m/%Y %H:%M:%S")
-        duration = difference.total_seconds()
-        self.timespent_variable = f"{float(duration / 60):.2f}" #in minutes f"{duration:.0f}sec; {float(duration / 60):.2f}min"
+    timespent_initialdecision = models.StringField()
+
+    # def time_spent2(self, starttime, endtime, timespent_variable): #e.g. self.player.time_spent(self, start_mainpart, end_mainpart, timespent_mainpart)
+    #     difference = datetime.datetime.strptime(endtime, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(starttime, "%d/%m/%Y %H:%M:%S")
+    #     duration = difference.total_seconds()
+    #     self.timespent_variable = f"{float(duration / 60):.2f}" #in minutes f"{duration:.0f}sec; {float(duration / 60):.2f}min"
 
     # ip_address = models.StringField()
     # browser = models.StringField()
@@ -164,30 +210,30 @@ class Player(BasePlayer):
 
     feedback=create_mc("Please select the right answer:", [[1,"My decisions might be reviewed by the experimental administrator who then sends me written feedback."],[2,"My decisions will not reviewed by anyone."], [3,"My decisions do not influence my compensation."]])
 
-    manipulation_A1=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to employees who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]])
+    manipulation_A1=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to managers who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]])
 
-    manipulation_A2=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to employees who have the courage to...", [[2,"... 'pull the plug' of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
+    manipulation_A2=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to managers who have the courage to...", [[2,"... 'pull the plug' of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
 
-    manipulation_A3=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to employees who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big. Additionally, employees should also have the courage to ”pull the plug” of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
+    manipulation_A3=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to managers who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big. Additionally, managers should also have the courage to ”pull the plug” of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
 
     when_FA=create_mc("When do I receive a Failure Award?", [[1,"I will always receive a Failure Award with 100% certainty by the end of the experiment."],[2,"In case I keep investing in a failing project which ends up generating high returns."], [3,"In case I take value adding risks but my project ends up failing and I deliberately decide for project discontinuation."]])
 
-    definition=create_mc("How does CleverClean define a failing project?", [[1,"A project is defined as failing in case the management board itself announces that the project is failing."],[2,"A project is defined as failing when it generates less expected value than initially predicted and less than the expected value of an alternative project."], [3,"A project is defined as failing when it generates more expected value than initially predicted and more than the expected value of an alternative project."]])
+    definition=create_mc("How does CleverClean Inc. define a failing project?", [[1,"A project is defined as failing in case the management board itself announces that the project is failing."],[2,"A project is defined as failing if investing a dollar in this project creates lower expected returns than investing in alternative projects."], [3,"A project is defined as failing when it generates more expected value than initially predicted and more than the expected value of an alternative project."]])
 
     delay=create_mc("The possibility to receive a Failure Award...", [[1,"... decreases in case of delayed project discontinuation."],[2,"... increases in case of delayed project discontinuation."], [3,"... is independent of the timing of my discontinuation decision."]])
 
-    what_FA=create_mc("What do I receive as a Failure Award...", [[1,"... 0.2m Lira."],[2,"... 1% of the total 0.2m Lira Failure Award budget."], [3,"... 1% of the project account's balance."]])
+    what_FA=create_mc("What do I receive as a Failure Award...", [[1,"... 0.2 million Lira."],[2,"... 1% of the total 0.2 million Lira Failure Award budget."], [3,"... 1% of the project's outcome."]])
 
     # multiplechoice field: choices has to be an iterable and every of its elements has to contain exactly 2 elements.
     compensation_FA = models.StringField(widget=forms.widgets.CheckboxSelectMultiple(choices=[["1","Fixed payment"],["2","Lottery payout"], ["3","Variable compensation from the main task"], ["4","Potential Failure Award"]]), label="What are the components of your total compensation? (please select all applicable boxes)")
 
     compensation_Co = models.StringField(widget=forms.widgets.CheckboxSelectMultiple(choices=[["1","Fixed payment"],["2","Lottery payout"], ["3","Variable compensation from the main task"], ["4","A monetary bonus"]]), label="What are the components of your total compensation? (please select all applicable boxes)")
 
-    example = models.StringField(label="In the following example, what is the balance on the project account after the project is completed (in million Lira)?")
+    example = models.StringField(label="In the following example, what is the project's outcome after it is completed (in million Lira)?")
 
-    variable = models.StringField(label="How much is your variable compensation in Lira if the final balance of the project account is 5 million Lira and you qualify to receive a Failure Award with a budget of 0.2m Lira?")
+    variable = models.StringField(label="How much is your variable compensation in Lira if the project's outcome is 5 million Lira and you qualify to receive a Failure Award with a budget of 0.2m Lira?")
 
-    variable_c = models.StringField(label="How much is your variable compensation in Lira if the final balance of the project account is 5 million Lira after the completion of the project?")
+    variable_c = models.StringField(label="How much is your variable compensation in Lira if the project's outcome is 5 million Lira after the completion of the project?")
 
     dollars = models.StringField(label="How many Dollars equal 35,000 Lira?")
 
@@ -201,11 +247,11 @@ class Player(BasePlayer):
 
     pq3=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="In my opinion project continuation is associated with failure.")
 
-    pq4=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="According to CleverClean, continuing the project meant to invest more money in a failing project.")
+    pq4=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="According to CleverClean Inc., continuing the project meant to invest more money in a failing project.")
 
-    pq5=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The Failure Award influenced my final recommendation to the management board as follows: I was more tending to... ")
+    pq5=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The Failure Award influenced my recommendation to the management board as follows: I was more tending to... ")
 
-    pq6m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="How would you characterize your project decision? Choosing the project Smart Mob Robot poses...")
+    pq6m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="How would you characterize your project decision? Choosing the project Smart Mop Robot poses...")
 
     pq6v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="How would you characterize your project decision? The project Smart Vacuum Robot poses...")
 
@@ -215,7 +261,7 @@ class Player(BasePlayer):
 
     pq8v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I am convinced, that my chosen project Smart Vacuum Robot will be successful.")
 
-    pq8m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I am convinced that my chosen project Smart Mob Robot will be successful.")
+    pq8m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I am convinced that my chosen project Smart Mop Robot will be successful.")
 
     pq9m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I believe there are very little risks in continuing to invest in the Smart Mop Robot.")
 
@@ -225,17 +271,17 @@ class Player(BasePlayer):
 
     pq11=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="In my role as a manager at CleverClean Inc. I had concerns about taking risks.")
 
-    pq12m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I consider it as a failure to have originally invested in the project Smart Mob Robot.")
+    pq12m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I consider it as a failure to have originally invested in the project Smart Mop Robot.")
 
     pq12v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I consider it as a failure to have originally invested in the project Smart Vacuum Robot.")
 
     pq13=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I had already invested so much that it seemed silly…")
 
-    pq14m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I feel responsible for the outcome of my Smart Mob Robot project.")
+    pq14m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I feel responsible for the outcome of my Smart Mop Robot project.")
 
     pq14v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I feel responsible for the outcome of my Smart Vacuum Robot project.")
 
-    pq15m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="It was important to me to complete the Smart Mob Robot project.")
+    pq15m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="It was important to me to complete the Smart Mop Robot project.")
 
     pq15v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="It was important to me to complete the Smart Vacuum Robot project.")
 
@@ -259,7 +305,7 @@ class Player(BasePlayer):
 
     pq25=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I thought that it would look good if I...")
 
-    pq26=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="In your opinion, what is the likelihood that discontinuing the project would result in negative personal repercussions (e.g. low performance evaluations, decreased promotion probability, lower reputation, etc.):")
+    pq26=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="In your opinion, what is the likelihood that terminating the project results in negative personal consequences (e.g. decreased promotion probability):")
 
     pq27=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I was afraid that important persons (e.g. superiors) could receive a bad impression of me in case I terminate the project.")
 
@@ -283,7 +329,7 @@ class Player(BasePlayer):
 
     pq36=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I often worry about what others think about me.")
 
-    pqAC1=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I have never used the Internet myself.")
+    pqAC1=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I have never used the Internet in my whole life.")
 
     pqAC2=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I currently don’t pay attention to the questions I am being asked in the survey.")
 

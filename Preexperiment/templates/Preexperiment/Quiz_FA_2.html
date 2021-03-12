@@ -35,16 +35,14 @@
         </div>
         <div class="card-body">
             <p>
-                In the following you will have to answer some questions to demonstrate that you have understood the experiment instructions.
+                In the following you will have to correctly answer several questions to demonstrate that you have understood the experiment instructions.
             </p>
     
             <p>
-                If you have difficulties answering a question, please return to the experiment instructions by clicking “Instructions” at the bottom of the page.
+                If you have difficulties answering a question, please return to the experiment instructions by clicking “Instructions” or "Failure Award" at the bottom of the page.
             </p>
     
-            <p>
-                After you have answered all questions correctly, you start with the main task of the experiment.
-            </p>
+
     
             <div style="text-align:center">
             <button type="button" id="showinfo" class="btn btn-primary btn-large">Show questions</button>
@@ -80,7 +78,7 @@
     
                 <b>{{ field.label }}</b>
                     <hr>
-                    <p>The current balance of the project account amounts to 5m Lira. <br>The required initial investment of a project is 0.5m Lira. <br>The project generates discounted cash inflows of 1.5m Lira.
+                    <p>The required initial investment of a project is 0.5m Lira. <br>The project generates discounted cash inflows of 1.5m Lira.
                     </p>
                     {{ field }}
                     <i>Please enter your answer as a decimal number with one decimal place (e.g. 1.2)</i>
@@ -178,7 +176,7 @@
         
                     <b>{{ field.label }}</b>
                         <hr>
-                        <p>The current balance of the project account amounts to 5m Lira. <br>The required initial investment of a project is 0.5m Lira. <br>The project generates discounted cash inflows of 1.5m Lira.
+                        <p>The required initial investment of a project is 0.5m Lira. <br>The project generates discounted cash inflows of 1.5m Lira.
                         </p>
                         {{ field }}
                         <i>Please enter your answer as a decimal number with one decimal place (e.g. 1.2)</i>
@@ -230,7 +228,7 @@
     {% endif %}
     
     <!-- footerbar with instructions and calculator modals -->
-    {% include "global/FooterContentFA2.html" %}
+    {% include "global/FooterContentFA2_withFA.html" %}
     
     <!-- hidden field to store time spent on page in seconds -->
     <input type="hidden" name="timer_quiz" id="timer_quiz" value="{{ player.timer_quiz }}">

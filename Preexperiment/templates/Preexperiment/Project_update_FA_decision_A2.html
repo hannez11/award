@@ -130,7 +130,7 @@
         <div class="row">
     
           <div class="col-sm">
-            <h3>Projekt Smart {{ player.initial_decision }}</h3>
+            <h3>Project Smart {{ player.initial_decision }}</h3>
             <h4>Update 2022</h4>
           </div>
     
@@ -141,35 +141,7 @@
         </div>
       </div>
     
-        <hr>
-      
-        <div class="card-deck" style="text-align: center;">
-    
-            <div class="card">
-              <div class="card-header">
-                Project launch date
-              </div>
-              <div class="card-body">
-                <p class="card-text" style="text-align: center; padding: 10;">2021</p>
-              </div>
-            </div>
-    
-          
-    
-            <div class="card">
-              <div class="card-header">
-                Project account balance
-              </div>
-              <div class="card-body">
-                <p class="card-text" style="text-align: center; text-underline-offset: 6px; font-weight: 510">
-                  <span style="text-decoration: underline; text-decoration-color: #d3d3d3;">Project start (2021): 7.5m Lira</span> <br>
-                  Currently (2022): 4m Lira
-                </p>
-              </div>
-            </div>
-    
-        </div>
-      <hr>
+      <hr>  
     
       <div class="row">
         <div class="col-md-3">
@@ -196,7 +168,7 @@
                 <h5 class="card-header">Updated Project Report</h5>
                 <div class="card-body">
                   <p> The initial investment of 3.5m Lira has already been spent and several improvements of the product design have been made.</p><hr>
-                  <p>However, the development process of your project <strong>did not go as planned</strong>.</p>
+                  <p>However, the development process of your project is worse than expected.</p>
                   <p>It turned out that the expertise in the area of artificial intelligence (AI) is not sufficient enough to develop the mapping software. In order to complete the project, an external AI professional needs to be hired which requires an <i>additional investment</i> of 2m Lira.</p><hr>
                   <p>In addition, the marketing department has discovered that an important competitor is also developing a similar product and is about to launch it onto the market. This will most likely reduce the sales volume and market share of Smart {{ player.initial_decision }}.</p><hr>
                   <p>However, existing products of the main competitors are in general of lower quality than those of CleverClean Inc.</p>
@@ -209,15 +181,13 @@
     
             <div class="tab-pane fade" id="Szenarioanalyse" role="tabpanel" aria-labelledby="Szenarioanalyse-tab">
               <div class="card">
-                <h5 class="card-header">Updated Scenario Analysis Smart {{ player.initial_decision }}</h5>
+                <h5 class="card-header">Updated Scenario Analysis</h5>
                 
                 <div class="card-body">
-                  <div class="alert alert-warning" role="alert" style="border-color: black;">
-                    As you know, the major part of your variable compensation depends on the project success and thus your decisions. You also have the opportunity to receive a Failure Award if you have the courage to “pull the plug” of a failing project.
-                  </div>
-                  <p>Despite the fact that you have already invested 3.5m Lira in your Smart {{ player.initial_decision }} project, it is possible to terminate your Smart {{ player.initial_decision }} project.</p>
-                  <p>If you decide to stop your project, you can invest the 2m Lira - which otherwise is spent for the recruitment of an external AI professional if the project continues - in an alternative project.</p><hr>
-                  <p>If you decide to continue your Smart {{ player.initial_decision }} project now, you will be able to terminate it after another year has passed. </p><hr>
+                  
+                  <p>Despite the fact that you have already invested 3.5m Lira in your Smart {{ player.initial_decision }} project, it is possible to terminate your project.</p>
+                  <p>If you decide to stop your project, you can invest the 2m Lira - which otherwise is spent for the recruitment of an external AI professional if the project continues - in an alternative project.</p>
+                  <p>If you decide to continue your Smart {{ player.initial_decision }} project now, you have the possibility to terminate it after another year has passed. </p><hr>
                   <div><p>Based on the changed circumstances the predicted values were updated as follows: 
                   </p></div>
   
@@ -248,8 +218,8 @@
                     <tbody>
                       <tr>
                         <td scope="row"><strong>Probability</strong></td>
-                        <td style="text-align: center;">33%</td>
-                        <td style="text-align: center;">67%</td>
+                      <td style="text-align: center;"><strong>33%</strong></td>
+                      <td style="text-align: center;"><strong>67%</strong></td>
                       </tr>
                       <tr>
                         <td scope="row"><strong>Additional investment</strong></td>
@@ -262,11 +232,7 @@
                         <td style="text-align: center; vertical-align:middle">3m Lira</td>
                       </tr>
                       
-                      <tr>
-                        <td scope="row"><strong>Expected balance on the project account</strong></td>
-                        <td style="text-align: center;font-weight: 600; vertical-align:middle">9m Lira</td>
-                        <td style="text-align: center;font-weight: 600; vertical-align:middle">5m Lira</td>
-                      </tr>
+    
                     </tbody>
                   </table>
                 </div>
@@ -276,9 +242,11 @@
   
   
               <div class="card">
-                <h5 class="card-header">Alternative Project</h5>
-                
+                <h5 class="card-header">Alternative Project and Failure Award</h5>
                 <div class="card-body">
+                  <div class="alert alert-warning" role="alert" style="border-color: black;">
+                    As you know, the major part of your variable compensation depends on the project success and thus your decisions. You also have the opportunity to receive a Failure Award if you have the courage to “pull the plug” of a failing project.
+                  </div>
                   <p>The predicted values of the alternative project are the following:</p>
   
                   <table class="table table-striped">
@@ -297,13 +265,8 @@
                         <td scope="row"><strong>Expected discounted project inflows</strong></td>
                         <td style="text-align: center;">4.8m Lira</td>
                       </tr>
-                    
-                    <tr>
-                      <td style="text-align: left;font-weight: bold; width: 60%">Expected balance on the project account</td>
-                      <td style="text-align: center;font-weight: 600; vertical-align:middle">6.8m Lira</td>
-                    </tr>
                   </table>
-  
+                  <hr>
                   <p class="text-center"><strong>+</strong></p>
                
                   <table class="table table-striped">
@@ -328,8 +291,8 @@
               <div class="card">
                 <h5 class="card-header">Alternatives Investment</h5>
                   <div class="card-body">
-                  <p>Obwohl Sie bereits 4 Mio. Lira in Ihr Projekt Smart {{ player.initial_decision }} investiert haben, besteht die Möglichkeit das Projekt Smart {{ player.initial_decision }} abzubrechen.</p>
-                  <p>Falls Sie Ihr Projekt abbrechen, könnten die verbleibenden 3,5 Mio. Lira des Projektkontos - welche bei Projektfortsetzung für die externe Softwareprogrammierung gezahlt werden müssen - in ein alternatives Projekt investiert werden.</p>
+                  <p>Obwohl Sie bereits 4 Mio. Lira in Ihr Project Smart {{ player.initial_decision }} investiert haben, besteht die Möglichkeit das Project Smart {{ player.initial_decision }} abzubrechen.</p>
+                  <p>Falls Sie Ihr Project abbrechen, könnten die verbleibenden 3,5 Mio. Lira des Projectkontos - welche bei Projectfortsetzung für die externe Softwareprogrammierung gezahlt werden müssen - in ein alternatives Project investiert werden.</p>
                   <table class="table table-striped">
                     <thead style="text-align: center;">
                       <tr>
@@ -351,7 +314,7 @@
                   <br>
                   <table class="table table-striped">
                     <tr>
-                      <td style="font-weight: bold; width: 60%">Erwartete Differenz zum<br>ursprünglichen Projektguthaben</td>
+                      <td style="font-weight: bold; width: 60%">Erwartete Differenz zum<br>ursprünglichen Projectguthaben</td>
                       <td style="text-align: center;font-weight: 600; vertical-align:middle">-0,5 Mio. Lira</td>
                     </tr>
                   </table>
@@ -378,7 +341,7 @@
           <div class="row">
         
             <div class="col-sm">
-              <h3>Projekt Smart {{ player.initial_decision }}</h3>
+              <h3>Project Smart {{ player.initial_decision }}</h3>
               <h4>Update 2022</h4>
             </div>
         
@@ -392,12 +355,12 @@
         
         <div class="card">
           <div class="card-header">
-            <b>Final recommendation to the management board</b>
+            <b>Recommendation to the management board</b>
           </div>
           <div class="card-body">
             <div style="text-align: left;">
               <p>The management board would now like to know how strongly you recommend to continue your project Smart {{ player.initial_decision }}.</p>
-              <br>
+              <p><span style="font-weight: 400">If you recommend to continue your project now you will be given updated information about the project’s development. In this case you will have to make a final project decision one year later.</span></p>
               <p>To make a recommendation, <strong>click on the bar and move the slider to the desired position</strong>. Below the slider you can see the implication of your chosen values.</p>
             </div>
             
@@ -451,7 +414,7 @@
     
     <br><br>
     <!-- footerbar with instructions and calculator modals -->
-    {% include "global/FooterContentFA2.html" %}
+    {% include "global/FooterContentFA2_withFA.html" %}
     
     </body>
     
@@ -465,7 +428,7 @@
     
       // subdecision scripts
       // jquery to show initially hidden slider knob/thumb after slider is clicked once
-      $("#slider").on('touchstart click', function() { //click = mouseclick ; touchstart for mobile devices
+      $("#slider").on('touchstart click', function() { //click = mouseclick ; touchstart for mopile devices
         $(this).removeClass('sliderhidden').removeClass('sliderhiddenchrome').addClass('slidershown').addClass('slidershownchrome');
       })
     

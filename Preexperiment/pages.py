@@ -4,20 +4,21 @@ from .models import Constants
 import random #for payout determination
 
 
-
 class welcome(Page):
-    form_model = "player"
-
-    def after_all_players_arrive(self):
-        print("check")
-
-    def before_next_page(self):
-        self.player.get_time(self.player.start_total) #get start time
+    def vars_for_template(self):
+        self.player.get_time("start_total")
+    # def before_next_page(self):
+    #     print(self.player.start_total)
+    #     self.player.get_time(self.player.start_total) #get start time
 
 
 class prizewheel(Page):
     form_model = "player"
     form_fields = ["prizewheel"]
+
+    # def before_next_page(self):
+    #     print(self.player.start_instructions)
+    #     self.player.get_time(self.player.start_instructions) #get start time
 
 class fail(Page):
     def is_displayed(self):
@@ -57,28 +58,48 @@ class Experiment_instructions_A1(Page):
 
     def before_next_page(self):
         self.player.get_time("end_instructions") #get start time
-        self.player.time_spent(self, start_instructions, end_instructions, timespent_instructions)
 
 class Experiment_instructions_A2(Page):
     def is_displayed(self):
         return self.subsession.framing == "A2" 
     def before_next_page(self):
         self.player.get_time("end_instructions") #get start time
-        self.player.time_spent(self, start_instructions, end_instructions, timespent_instructions)
 
 class Experiment_instructions_A3(Page):
     def is_displayed(self):
         return self.subsession.framing == "A3" 
     def before_next_page(self):
         self.player.get_time("end_instructions") #get start time
-        self.player.time_spent(self, start_instructions, end_instructions, timespent_instructions)
 
 class Experiment_instructions_Control(Page):
     def is_displayed(self):
         return self.subsession.framing == "C0" 
     def before_next_page(self):
         self.player.get_time("end_instructions") #get start time
-        self.player.time_spent(self, start_instructions, end_instructions, timespent_instructions)
+
+class FailureAward_A1(Page):
+    def is_displayed(self):
+        return self.subsession.framing == "A1"
+
+class FailureAward_A2(Page):
+    def is_displayed(self):
+        return self.subsession.framing == "A2"
+
+class FailureAward_A3(Page):
+    def is_displayed(self):
+        return self.subsession.framing == "A3"
+
+class FailureAward_2_A1(Page):
+    def is_displayed(self):
+        return self.subsession.framing == "A1"
+
+class FailureAward_2_A2(Page):
+    def is_displayed(self):
+        return self.subsession.framing == "A2"
+
+class FailureAward_2_A3(Page):
+    def is_displayed(self):
+        return self.subsession.framing == "A3"
 
 class Quiz_FA_1(Page):
     form_model = "player"
@@ -111,7 +132,7 @@ class Quiz_FA_1(Page):
             return 'Your answer is not correct. Please read the experiment instructions again.'
     def example_error_message(self, value):
         # print('value is', value, type(value))
-        if not (value[0:3] == "6,0" or value == "6" or value[0:3] == "6.0"):
+        if not (value[0:3] == "1,0" or value == "1" or value[0:3] == "1.0"):
             self.player.example_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
             return 'Your answer is not correct. Please read the experiment instructions again.'
@@ -186,7 +207,7 @@ class Quiz_FA_2(Page):
             return 'Your answer is not correct. Please read the experiment instructions again.'
     def example_error_message(self, value):
         # print('value is', value, type(value))
-        if not (value[0:3] == "6,0" or value == "6" or value[0:3] == "6.0"):
+        if not (value[0:3] == "1,0" or value == "1" or value[0:3] == "1.0"):
             self.player.example_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
             return 'Your answer is not correct. Please read the experiment instructions again.'
@@ -260,7 +281,7 @@ class Quiz_FA_3(Page):
             return 'Your answer is not correct. Please read the experiment instructions again.'
     def example_error_message(self, value):
         # print('value is', value, type(value))
-        if not (value[0:3] == "6,0" or value == "6" or value[0:3] == "6.0" or value == "6.0m"):
+        if not (value[0:3] == "1,0" or value == "1" or value[0:3] == "1.0" or value == "1.0m"):
             self.player.example_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
             return 'Your answer is not correct. Please read the experiment instructions again.'
@@ -322,7 +343,7 @@ class Quiz_Control(Page):
             return 'Your answer is not correct. Please read the experiment instructions again.'
     def example_error_message(self, value):
         # print('value is', value, type(value))
-        if not (value[0:3] == "6,0" or value == "6" or value[0:3] == "6.0"):
+        if not (value[0:3] == "1,0" or value == "1" or value[0:3] == "1.0"):
             self.player.example_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
             return 'Your answer is not correct. Please read the experiment instructions again.'
@@ -351,23 +372,29 @@ class Quiz_Control(Page):
 
 class Quiz_completed(Page):
     def before_next_page(self):
-        self.player.get_time("start_mainpart") #get start time
+        self.player.get_time("start_mainpart")
+        self.player.get_time("start_initialdecision")
 
 class Project_2_A1(Page):
     def is_displayed(self):
         return self.subsession.framing == "A1" 
+    def before_next_page(self):
+        self.player.get_time("end_initialdecision")
 
 class Project_2_A2(Page):
     def is_displayed(self):
         return self.subsession.framing == "A2" 
+        self.player.get_time("end_initialdecision")
 
 class Project_2_A3(Page):
     def is_displayed(self):
         return self.subsession.framing == "A3" 
+        self.player.get_time("end_initialdecision")
 
 class Project_2_Control(Page):
     def is_displayed(self):
         return self.subsession.framing == "C0" 
+        self.player.get_time("end_initialdecision")
 
 class FA_1(Page):
     def is_displayed(self):
@@ -439,17 +466,31 @@ class Decision_1_Control(Page):
 
 class PEQ_1m(Page):
     form_model = "player"
-    form_fields = ["pq6m", "pq7m", "pq8m"]
+    form_fields = ["pq6m", "pq7m", "pq8m", "pq10"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot"
+        return self.player.initial_decision == "Mop Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
 
 class PEQ_1v(Page):
     form_model = "player"
-    form_fields = ["pq6v", "pq7v", "pq8v"]
+    form_fields = ["pq6v", "pq7v", "pq8v","pq10"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Vacuum Robot"
+        return self.player.initial_decision == "Vacuum Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
+
+class PEQ_1m_control(Page):
+    form_model = "player"
+    form_fields = ["pq6m", "pq7m", "pq8m"]
+
+    def is_displayed(self):
+        return self.player.initial_decision == "Mop Robot" and self.subsession.framing == "C0" 
+
+class PEQ_1v_control(Page):
+    form_model = "player"
+    form_fields = ["pq6m", "pq7m", "pq8m"]
+
+    def is_displayed(self):
+        return self.player.initial_decision == "Vaccum Robot" and self.subsession.framing == "C0" 
 
 class OneYear_later(Page):
     pass
@@ -583,7 +624,9 @@ class Decision_3YesNo(Page):
         self.player.sub2_decision = self.player.sub2_choices.split(",")[-1]
         self.participant.vars['sub2_decision'] = "Smart " + self.player.sub2_decision #global variable for the 2nd app
         # print("self.participant.vars['sub1_decision']:",self.participant.vars['sub1_decision'])
-    
+
+        self.player.get_time("end_mainpart")
+        
 
 class PEQ_Intro(Page):
     #determine subsequent decision bonus payments
@@ -650,51 +693,53 @@ class PEQ_Intro(Page):
         # print(f"Current player bonus payoff after lottery: {self.participant.payoff}")
         self.player.total_payout = self.participant.payoff_plus_participation_fee()
 
+        self.player.get_time("start_peq")
+
 class PEQ_FA_m1(Page):
     form_model = "player"
-    form_fields = ["pq1", "pq4", "pq10", "pq11"]
+    form_fields = ["pq1", "pq4", "pq11"]
     
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
+        return self.player.initial_decision == "Mop Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
 
 class PEQ_FA_m2(Page):
     form_model = "player"
     form_fields = ["pq18", "pq19", "pq20", "pq22", "pqAC1"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
+        return self.player.initial_decision == "Mop Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
 
 class PEQ_FA_m3(Page):
     form_model = "player"
     form_fields = ["pq12m", "pq13", "pq14m", "pq15m", "pq16", "pq17"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
+        return self.player.initial_decision == "Mop Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
 
 class PEQ_FA_m4(Page):
     form_model = "player"
     form_fields = ["pq23", "pq26", "pq24", "pq27"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
+        return self.player.initial_decision == "Mop Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
 
 class PEQ_FA_m5(Page):
     form_model = "player"
     form_fields = ["pq35", "pqAC2", "pq36"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
+        return self.player.initial_decision == "Mop Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
 
 class PEQ_FA_m6(Page):
     form_model = "player"
     form_fields = ["pq28", "pq29", "pq30", "pq32", "pq37", "pq31", "pq31a"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
+        return self.player.initial_decision == "Mop Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
 
 class PEQ_FA_v1(Page):
     form_model = "player"
-    form_fields = ["pq1", "pq4", "pq10", "pq11"]
+    form_fields = ["pq1", "pq4", "pq11"]
 
     def is_displayed(self):
         return self.player.initial_decision == "Vacuum Robot" and (self.subsession.framing == "A1" or self.subsession.framing == "A2" or self.subsession.framing == "A3")
@@ -739,42 +784,42 @@ class PEQ_Control_m1(Page):
     form_fields = ["pq1", "pq4", "pq11"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and self.subsession.framing == "C0"
+        return self.player.initial_decision == "Mop Robot" and self.subsession.framing == "C0"
 
 class PEQ_Control_m2(Page):
     form_model = "player"
     form_fields = ["pq18", "pq19", "pq20", "pqAC1"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and self.subsession.framing == "C0"
+        return self.player.initial_decision == "Mop Robot" and self.subsession.framing == "C0"
 
 class PEQ_Control_m3(Page):
     form_model = "player"
     form_fields = ["pq12m", "pq13", "pq14m", "pq15m", "pq16", "pq17"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and self.subsession.framing == "C0"
+        return self.player.initial_decision == "Mop Robot" and self.subsession.framing == "C0"
 
 class PEQ_Control_m4(Page):
     form_model = "player"
     form_fields = ["pq23", "pq26", "pq27"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and self.subsession.framing == "C0"
+        return self.player.initial_decision == "Mop Robot" and self.subsession.framing == "C0"
 
 class PEQ_Control_m5(Page):
     form_model = "player"
     form_fields = ["pq35", "pqAC2", "pq36"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and self.subsession.framing == "C0"
+        return self.player.initial_decision == "Mop Robot" and self.subsession.framing == "C0"
 
 class PEQ_Control_m6(Page):
     form_model = "player"
     form_fields = ["pq29", "pq32", "pq31", "pq31a"]
 
     def is_displayed(self):
-        return self.player.initial_decision == "Mob Robot" and self.subsession.framing == "C0"
+        return self.player.initial_decision == "Mop Robot" and self.subsession.framing == "C0"
 
 class PEQ_Control_v1(Page):
     form_model = "player"
@@ -823,8 +868,9 @@ class demographics(Page):
     form_fields = ["gender", "age", "language", "country", "degree", "workexperience", "industry"]
 
     def before_next_page(self):
-        self.player.get_time("end")
-        self.player.time_spent()
+        self.player.get_time("end_peq")
+        self.player.get_time("end_total")
+    #  self.player.time_spent(self.player.start_total, self.player.end_total, self.player.timespent_total)
 
 class Compensation_FA(Page):
     def vars_for_template(self):
@@ -834,10 +880,10 @@ class End(Page):
     pass
 
 #test sequence
-# page_sequence = [Project_update_FA_decision_A1, PEQ_FA_m6]
+#page_sequence = [Experiment_instructions_A1]
 
 #complete page seq
-page_sequence = [welcome, prizewheel, fail, overview, lottery1, lottery2, after_lottery, Experiment_instructions_A1, Experiment_instructions_A2, Experiment_instructions_A3, Experiment_instructions_Control, Quiz_FA_1, Quiz_FA_2, Quiz_FA_3, Quiz_Control, Quiz_completed, Project_2_A1, Project_2_A2, Project_2_A3, Project_2_Control, FA_1, FA_2, FA_3, FA_Control, Decision_1_A1, Decision_1_A2, Decision_1_A3, Decision_1_Control, PEQ_1m, PEQ_1v, OneYear_later, Project_update_FA_decision_A1, Project_update_FA_decision_A2, Project_update_FA_decision_A3, Project_update_Control_decision, PEQ_2_FA, Decision_2YesNo, Twoyears_later, Project_update_FA_2_decision_A1, Project_update_FA_2_decision_A2, Project_update_FA_2_decision_A3, Project_update_Control_2_decision, Decision_3YesNo, PEQ_Intro, PEQ_FA_m1, PEQ_FA_m2, PEQ_FA_m3, PEQ_FA_m4, PEQ_FA_m5, PEQ_FA_m6, PEQ_FA_v1, PEQ_FA_v2, PEQ_FA_v3, PEQ_FA_v4, PEQ_FA_v5, PEQ_FA_v6, PEQ_Control_m1, PEQ_Control_m2, PEQ_Control_m3, PEQ_Control_m4, PEQ_Control_m5, PEQ_Control_m6, PEQ_Control_v1, PEQ_Control_v2, PEQ_Control_v3, PEQ_Control_v4, PEQ_Control_v5, PEQ_Control_v6, demographics, Compensation_FA, End]
+page_sequence = [welcome, prizewheel, fail, overview, lottery1, lottery2, after_lottery, Experiment_instructions_A1, Experiment_instructions_A2, Experiment_instructions_A3, Experiment_instructions_Control, FailureAward_A1, FailureAward_A2, FailureAward_A3, FailureAward_2_A1, FailureAward_2_A2, FailureAward_2_A3, Quiz_FA_1, Quiz_FA_2, Quiz_FA_3, Quiz_Control, Quiz_completed, Project_2_A1, Project_2_A2, Project_2_A3, Project_2_Control, FA_1, FA_2, FA_3, FA_Control, Decision_1_A1, Decision_1_A2, Decision_1_A3, Decision_1_Control, PEQ_1m, PEQ_1v, PEQ_1m_control, PEQ_1v_control, OneYear_later, Project_update_FA_decision_A1, Project_update_FA_decision_A2, Project_update_FA_decision_A3, Project_update_Control_decision, PEQ_2_FA, Decision_2YesNo, Twoyears_later, Project_update_FA_2_decision_A1, Project_update_FA_2_decision_A2, Project_update_FA_2_decision_A3, Project_update_Control_2_decision, Decision_3YesNo, PEQ_Intro, PEQ_FA_m1, PEQ_FA_m2, PEQ_FA_m3, PEQ_FA_m4, PEQ_FA_m5, PEQ_FA_m6, PEQ_FA_v1, PEQ_FA_v2, PEQ_FA_v3, PEQ_FA_v4, PEQ_FA_v5, PEQ_FA_v6, PEQ_Control_m1, PEQ_Control_m2, PEQ_Control_m3, PEQ_Control_m4, PEQ_Control_m5, PEQ_Control_m6, PEQ_Control_v1, PEQ_Control_v2, PEQ_Control_v3, PEQ_Control_v4, PEQ_Control_v5, PEQ_Control_v6, demographics, Compensation_FA, End]
 
 #compensation check
 # page_sequence = [lottery1, lottery2, Decision_1_A1, Project_update_FA_decision_A1, Decision_2YesNo, Project_update_FA_2_decision_A1, Decision_3YesNo, PEQ_Intro, Compensation_FA]
