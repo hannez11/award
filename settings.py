@@ -49,20 +49,19 @@ mturk_hit_settings = dict(
     {
         'QualificationTypeId': "3GNL8ZDCGCK9VB6Q1AXGLO7B64OOI5",
         'Comparator': "DoesNotExist",
-    },
+        },
             { # Worker_​NumberHITsApproved
             'QualificationTypeId': "00000000000000000040",
             'Comparator': "GreaterThan",
-            'IntegerValues': [100]
+            'IntegerValues': [500] #might be too high. 100 usually recommended. 500 recommended in bentley et al 2020 TAR
             },
-   	{ # Worker_​NumberHITsApproved
+        	{ # Worker_​NumberHITsApproved
             'QualificationTypeId': "000000000000000000L0",
             'Comparator': "GreaterThan",
             'IntegerValues': [95]
         },
-   
     ],
-    grant_qualification_id='3GNL8ZDCGCK9VB6Q1AXGLO7B64OOI5', # to prevent retakes
+    grant_qualification_id='3GNL8ZDCGCK9VB6Q1AXGLO7B64OOI5', # to prevent retakes. create new qualification and copy paste
 )
 
 SESSION_CONFIG_DEFAULTS = dict(

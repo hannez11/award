@@ -28,7 +28,7 @@ Compensation
     <tr>
       <td scope="row">In year 2022 you decided to ...</th>
       {% if player.sub1_decision == "terminate" and subsession.framing != "C0" %}
-      <td style="text-align: center;">terminate your project and invest into the alternative project. Thereby you earned {{ Constants.alternative1_boni|c }} and you received {{ Constants.failure_award|c }} from the failure award.</td>
+      <td style="text-align: center;">terminate your project and invest into the alternative project. Thereby you earned {{ Constants.alternative1_boni|c }} and you received {{ Constants.failure_award|c }} from the Courage Award.</td>
       {% elif player.sub1_decision == "terminate" and subsession.framing == "C0" %}
       <td style="text-align: center;">terminate your project and invest into the alternative project. Thereby you earned {{ Constants.alternative1_boni_control|c }}</td>
       {% else %}
@@ -39,9 +39,9 @@ Compensation
     <tr>
         <td scope="row">In year 2023 you decided to ...</th>
         {% if player.sub2_decision == "terminate" and subsession.framing != "C0" and player.failure_award_draft == 1 %}
-        <td style="text-align: center;">terminate your project and invest into the alternative project. Thereby you earned {{ Constants.alternative2_boni|c }} and you successfully qualified and received {{ Constants.failure_award|c }} from the failure award.</td>
+        <td style="text-align: center;">terminate your project and invest into the alternative project. Thereby you earned {{ Constants.alternative2_boni|c }} and you successfully qualified and received {{ Constants.failure_award|c }} from the Courage Award.</td>
         {% elif player.sub2_decision == "terminate" and subsession.framing != "C0" and player.failure_award_draft == 0 %}
-        <td style="text-align: center;">terminate your project and invest into the alternative project. Thereby you earned {{ Constants.alternative2_boni|c }}. The chance to qualify for the failure award was 50%. You did not qualify for the failure award.</td>
+        <td style="text-align: center;">terminate your project and invest into the alternative project. Thereby you earned {{ Constants.alternative2_boni|c }}. The chance to qualify for the Courage Award was 50%. You did not qualify for the Courage Award.</td>
         {% elif player.sub2_decision == "terminate" and subsession.framing == "C0" %}
         <td style="text-align: center;">terminate your project and invest into the alternative project. Thereby you earned {{ Constants.alternative2_boni_control|c }}</td>
         {% else %}

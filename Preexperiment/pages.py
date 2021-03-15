@@ -4,7 +4,7 @@ from .models import Constants
 import random #for payout determination
 
 
-#attention checks: pricewheel seconds? introduction seconds? failure award with examples seconds? quiz zu oft falsch (FA items)? initial decision time? PEQ_1v attention check einbauen? beide attention checks failed? auf 2-3 PEQ seiten gleiche Antwort
+#attention checks: pricewheel seconds? introduction seconds? Courage Award with examples seconds? quiz zu oft falsch (FA items)? initial decision time? PEQ_1v attention check einbauen? beide attention checks failed? auf 2-3 PEQ seiten gleiche Antwort
 #auf anweisungen verweisen
 
 class welcome(Page):
@@ -26,9 +26,11 @@ class fail(Page): #or conditions
     def is_displayed(self):
         return (self.player.prizewheel!=3 or
         (self.player.timespent_lottery is not None and self.player.timespent_lottery < 0) or #30 secs
-        (self.player.timespent_instructions is not None and self.player.timespent_instructions < 0) or #90 secs
-        (self.player.timespent_failureaward is not None and self.player.timespent_failureaward < 0) or #40 secs
-        (self.player.timespent_initialdecision is not None and self.player.timespent_initialdecision < 0) #35 secs
+        (self.player.timespent_instructions is not None and self.player.timespent_instructions < 0) or #70 secs
+        (self.player.timespent_failureaward is not None and self.player.timespent_failureaward < 0) or #50 secs
+        (self.player.quiz_totalwronganswers is not None and self.player.quiz_totalwronganswers >= 15) or # ANPASSEN
+        (self.player.timespent_initialdecision is not None and self.player.timespent_initialdecision < 0) or #40 secs
+        (self.player.timespent_projectupdate is not None and self.player.projectupdate < 0) #90 secs
         )
 
 class fail_peq(Page): #both attention checks <= 2 AND several peqs answered exactly the same. 
@@ -578,6 +580,9 @@ class Decision_2YesNo(Page):
     form_model = "player"
     form_fields = ["sub1_choices", 'timer_subchoice'] #neues timer model erstellen
 
+    def vars_for_template(self):
+        sub_decision1adjusted = 100 - self.player.sub_decision
+        return dict(sub_decision1adjusted=sub_decision1adjusted)
     def before_next_page(self):
         #print(self.player.sub1_choices.split(",")[-1]) # final sub1 decision. sub1_choices records all button clicks on the two investment options
         self.player.sub1_decision = self.player.sub1_choices.split(",")[-1]
@@ -596,6 +601,8 @@ class PEQ_2_FA(Page):
 class Twoyears_later(Page):
     def is_displayed(self):
         return self.player.sub1_decision != "terminate"
+    def before_next_page(self):
+        self.player.get_time("start_projectupdate")
 
 class Project_update_FA_2_decision_A1(Page):
     form_model = "player"
@@ -604,6 +611,7 @@ class Project_update_FA_2_decision_A1(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision2'] = self.player.sub_decision2 #set global so can be used in the next app
+        self.player.get_time("end_projectupdate")
 
     def is_displayed(self):
         return self.player.sub1_decision != "terminate" and self.subsession.framing == "A1"
@@ -615,6 +623,7 @@ class Project_update_FA_2_decision_A2(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision'] = self.player.sub_decision #set global so can be used in the next app
+        self.player.get_time("end_projectupdate")
     
     def is_displayed(self):
         return self.player.sub1_decision != "terminate" and self.subsession.framing == "A2"
@@ -627,6 +636,7 @@ class Project_update_FA_2_decision_A3(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision'] = self.player.sub_decision #set global so can be used in the next app
+        self.player.get_time("end_projectupdate")
     
     def is_displayed(self):
         return self.player.sub1_decision != "terminate" and self.subsession.framing == "A3"
@@ -639,6 +649,7 @@ class Project_update_Control_2_decision(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision'] = self.player.sub_decision #set global so can be used in the next app
+        self.player.get_time("end_projectupdate")
     
     def is_displayed(self):
         return self.player.sub1_decision != "terminate" and self.subsession.framing == "C0"
@@ -651,6 +662,9 @@ class Decision_3YesNo(Page):
     form_model = "player"
     form_fields = ["sub2_choices", 'timer_sub2choice'] #neues timer model erstellen
 
+    def vars_for_template(self):
+        sub_decision2adjusted = 100 - self.player.sub_decision2
+        return dict(sub_decision2adjusted=sub_decision2adjusted)
     def before_next_page(self):
         #print(self.player.sub1_choices.split(",")[-1]) # final sub1 decision. sub1_choices records all button clicks on the two investment options
         self.player.sub2_decision = self.player.sub2_choices.split(",")[-1]
@@ -913,7 +927,7 @@ class End(Page):
     pass
 
 #test sequence
-# page_sequence = [Decision_1_Control, PEQ_Control_v2, PEQ_Control_v3, PEQ_Control_v5, fail_peq, End]
+#page_sequence = [Decision_1_A1, Project_update_FA_decision_A1, Decision_2YesNo]
 
 #complete page seq
 page_sequence = [welcome, prizewheel, fail, overview, lottery1, lottery2, fail, after_lottery, Experiment_instructions_A1, Experiment_instructions_A2, Experiment_instructions_A3, Experiment_instructions_Control, fail, FailureAward_A1, FailureAward_A2, FailureAward_A3, fail, FailureAward_2_A1, FailureAward_2_A2, FailureAward_2_A3, Quiz_FA_1, Quiz_FA_2, Quiz_FA_3, Quiz_Control, Quiz_completed, Project_2_A1, Project_2_A2, Project_2_A3, Project_2_Control, fail, FA_1, FA_2, FA_3, FA_Control, Decision_1_A1, Decision_1_A2, Decision_1_A3, Decision_1_Control, PEQ_1m, PEQ_1v, PEQ_1m_control, PEQ_1v_control, OneYear_later, Project_update_FA_decision_A1, Project_update_FA_decision_A2, Project_update_FA_decision_A3, Project_update_Control_decision, PEQ_2_FA, Decision_2YesNo, Twoyears_later, Project_update_FA_2_decision_A1, Project_update_FA_2_decision_A2, Project_update_FA_2_decision_A3, Project_update_Control_2_decision, Decision_3YesNo, PEQ_Intro, PEQ_FA_m1, PEQ_FA_m2, PEQ_FA_m3, PEQ_FA_m4, PEQ_FA_m5, PEQ_FA_m6, PEQ_FA_v1, PEQ_FA_v2, PEQ_FA_v3, PEQ_FA_v4, PEQ_FA_v5, PEQ_FA_v6, PEQ_Control_m1, PEQ_Control_m2, PEQ_Control_m3, PEQ_Control_m4, PEQ_Control_m5, PEQ_Control_m6, PEQ_Control_v1, PEQ_Control_v2, PEQ_Control_v3, PEQ_Control_v4, PEQ_Control_v5, PEQ_Control_v6, fail_peq, demographics, Compensation_FA, End]

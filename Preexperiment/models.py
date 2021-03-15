@@ -143,6 +143,8 @@ class Player(BasePlayer):
     end_instructions = models.StringField()
     start_initialdecision = models.StringField()
     end_initialdecision = models.StringField()
+    start_projectupdate = models.StringField()
+    end_projectupdate = models.StringField()
     start_total = models.StringField() #get time of participant when welcome page is loaded
     end_total = models.StringField() #get time of participant when last page is loaded
 
@@ -153,6 +155,7 @@ class Player(BasePlayer):
     timespent_instructions = models.IntegerField()
     timespent_total = models.IntegerField()
     timespent_initialdecision = models.IntegerField()
+    timespent_projectupdate = models.IntegerField()
 
     def get_time(self, start_or_end): #specify pages.py, eg: before_next_page(self): self.player.get_time("end_mainpart")
         if start_or_end == "start_mainpart":
@@ -198,6 +201,13 @@ class Player(BasePlayer):
             
             difference = datetime.datetime.strptime(self.end_initialdecision, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_initialdecision, "%d/%m/%Y %H:%M:%S")
             self.timespent_initialdecision = int(difference.total_seconds())
+        elif start_or_end == "start_projectupdate":
+            self.start_projectupdate = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        elif start_or_end == "end_projectupdate":
+            self.end_projectupdate = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            
+            difference = datetime.datetime.strptime(self.end_projectupdate, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_projectupdate, "%d/%m/%Y %H:%M:%S")
+            self.timespent_projectupdate = int(difference.total_seconds())
         elif start_or_end == "start_total":
             self.start_total = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         elif start_or_end == "end_total":
@@ -223,30 +233,30 @@ class Player(BasePlayer):
 
     first_task=create_mc("My first task as a leading manager of the projects department is to...", [[1,"... develop a new product idea."],[2,"... select two innovation projects."], [3,"... select one of two potential innovation projects."]])
 
-    feedback=create_mc("Please select the right answer:", [[1,"My decisions might be reviewed by the experimental administrator who then sends me written feedback."],[2,"My decisions will not reviewed by anyone."], [3,"My decisions do not influence my compensation."]])
+    feedback=create_mc("Please select the right answer:", [[1,"My decisions might be reviewed by the experimental administrator who then sends me written feedback."],[2,"My decisions will not be reviewed by anyone."], [3,"My decisions do not influence my compensation."]])
 
-    manipulation_A1=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to managers who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]])
+    manipulation_A1=create_mc("The board is convinced that Courage Awards help CleverClean Inc. to gain a competitive advantage by granting them to managers who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]])
 
-    manipulation_A2=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to managers who have the courage to...", [[2,"... 'pull the plug' of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
+    manipulation_A2=create_mc("The board is convinced that Courage Awards help CleverClean Inc. to gain a competitive advantage by granting them to managers who have the courage to...", [[2,"... 'pull the plug' of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
 
-    manipulation_A3=create_mc("The board is convinced that Failure Awards help CleverClean Inc. to gain a competitive advantage by granting them to managers who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big. Additionally, managers should also have the courage to ”pull the plug” of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
+    manipulation_A3=create_mc("The board is convinced that Courage Awards help CleverClean Inc. to gain a competitive advantage by granting them to managers who have the courage to...", [[2,"... take value adding risks by trying something new and are not afraid to fail big. Additionally, managers should also have the courage to ”pull the plug” of a failing project before more resources are wasted and are not afraid to admit their failures."],[1,"... motivate themselves and others to strive for high effort even when a project seems to fail."], [3,"... do their outmost to avoid as many mistakes as possible during their daily working routine."]]) 
 
-    when_FA=create_mc("When do I receive a Failure Award?", [[1,"I will always receive a Failure Award with 100% certainty by the end of the experiment."],[2,"In case I keep investing in a failing project which ends up generating high returns."], [3,"In case I take value adding risks but my project ends up failing and I deliberately decide for project discontinuation."]])
+    when_FA=create_mc("When do I receive a Courage Award?", [[1,"I will always receive a Courage Award with 100% certainty by the end of the experiment."],[2,"In case I keep investing in a failing project which ends up generating high returns."], [3,"In case I take value adding risks but my project ends up failing and I deliberately decide for project discontinuation."]])
 
     definition=create_mc("How does CleverClean Inc. define a failing project?", [[1,"A project is defined as failing in case the management board itself announces that the project is failing."],[2,"A project is defined as failing if investing any additional dollar in this project creates lower expected returns than investing in alternative projects."], [3,"A project is defined as failing when it generates more expected value than initially predicted and more than the expected value of an alternative project."]])
 
-    delay=create_mc("The possibility to receive a Failure Award...", [[1,"... decreases in case of delayed project discontinuation."],[2,"... increases in case of delayed project discontinuation."], [3,"... is independent of the timing of my discontinuation decision."]])
+    delay=create_mc("The possibility to receive a Courage Award...", [[1,"... decreases in case of delayed project discontinuation."],[2,"... increases in case of delayed project discontinuation."], [3,"... is independent of the timing of my discontinuation decision."]])
 
-    what_FA=create_mc("What do I receive as a Failure Award...", [[1,"... 0.2 million Lira."],[2,"... 1% of the total 0.2 million Lira Failure Award budget."], [3,"... 1% of the project's outcome."]])
+    what_FA=create_mc("What do I receive as a Courage Award...", [[1,"... 0.2 million Lira."],[2,"... 1% of the total 0.2 million Lira Courage Award budget."], [3,"... 1% of the project's outcome."]])
 
     # multiplechoice field: choices has to be an iterable and every of its elements has to contain exactly 2 elements.
-    compensation_FA = models.StringField(widget=forms.widgets.CheckboxSelectMultiple(choices=[["1","Fixed payment"],["2","Lottery payout"], ["3","Variable compensation from the main task"], ["4","Potential Failure Award"]]), label="What are the components of your total compensation? (please select all applicable boxes)")
+    compensation_FA = models.StringField(widget=forms.widgets.CheckboxSelectMultiple(choices=[["1","Fixed payment"],["2","Lottery payout"], ["3","Variable compensation from the main task"], ["4","Potential Courage Award"]]), label="What are the components of your total compensation? (please select all applicable boxes)")
 
     compensation_Co = models.StringField(widget=forms.widgets.CheckboxSelectMultiple(choices=[["1","Fixed payment"],["2","Lottery payout"], ["3","Variable compensation from the main task"], ["4","A monetary bonus"]]), label="What are the components of your total compensation? (please select all applicable boxes)")
 
     example = models.StringField(label="In the following example, what is the project's outcome after it is completed (in million Lira)?")
 
-    variable = models.StringField(label="How much is your variable compensation in Lira if the project's outcome is 5 million Lira and you qualify to receive a Failure Award with a budget of 0.2m Lira?")
+    variable = models.StringField(label="How much is your variable compensation in Lira if the project's outcome is 5 million Lira and you qualify to receive a Courage Award with a budget of 0.2m Lira?")
 
     variable_c = models.StringField(label="How much is your variable compensation in Lira if the project's outcome is 5 million Lira after the completion of the project?")
 
@@ -264,7 +274,7 @@ class Player(BasePlayer):
 
     pq4=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="According to CleverClean Inc., continuing the project meant to invest more money in a failing project.")
 
-    pq5=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The Failure Award influenced my recommendation to the management board as follows: I was more tending to... ")
+    pq5=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The Courage Award influenced my recommendation to the management board as follows: I was more tending to... ")
 
     pq6m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="How would you characterize your project decision? Choosing the project Smart Mop Robot poses...")
 
@@ -282,11 +292,11 @@ class Player(BasePlayer):
 
     pq9v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I believe there are very little risks in continuing to invest in the Smart Vacuum Robot.")
 
-    pq10=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The Failure Award motivated me to take risks.")
+    pq10=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The Courage Award motivated me to take risks.")
 
-    pq10_eleven_m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I very strongly preferred chosing Smart Mop Robot over Smart Vacuum Robot.") #see Fehrenbacher 2020 paper (description of the dependent variable)
+    pq10_eleven_m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I very strongly preferred choosing Smart Mop Robot over Smart Vacuum Robot.") #see Fehrenbacher 2020 paper (description of the dependent variable)
 
-    pq10_eleven_v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I very strongly preferred chosing Smart Vacuum Robot over Smart Mop Robot.")
+    pq10_eleven_v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I very strongly preferred choosing Smart Vacuum Robot over Smart Mop Robot.")
 
     pq11=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="In my role as a manager at CleverClean Inc. I had concerns about taking risks.")
 
@@ -312,15 +322,15 @@ class Player(BasePlayer):
 
     pq19=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I have doubts about taking responsibility for future CelverClean’s Inc. projects.")
 
-    pq20=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I have the feeling that at CleverClean Inc. making failures is tolerated and not punished.")
+    pq20=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I have the feeling that at CleverClean Inc. making mistakes is tolerated and not punished.")
 
     pq21=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="It is safe to take risks at CleverClean Inc.") 
 
-    pq22=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="Due to the Failure Award I was not afraid to terminate my project and thereby admit my failure.") 
+    pq22=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="Due to the Courage Award I was not afraid to terminate my project and thereby admit my failure.") 
 
     pq23=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="To what extent do you feel the need to justify your initial project decision?") 
 
-    pq24=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="For me, receiving a Failure Award is something one should be ashamed of.")
+    pq24=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="For me, receiving a Courage Award is something one should be ashamed of.")
 
     pq25=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I thought that it would look good if I...")
 
@@ -328,11 +338,11 @@ class Player(BasePlayer):
 
     pq27=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I was afraid that important persons (e.g. superiors) could receive a bad impression of me in case I terminate the project.")
 
-    pq28=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The monetary compensation of $0.20 from the Failure Award was important to me.")
+    pq28=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The monetary compensation of $0.20 from the Courage Award was important to me.")
 
     pq29=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="It was important to me to achieve the highest possible compensation.")
 
-    pq30=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="Due to the Failure Award I put more focus on discovering potential project flaws.") #wording changed 15th march
+    pq30=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="Due to the Courage Award I put more focus on discovering potential project flaws.") #wording changed 15th march
 
     pq31=create_mc("I have already heard about the topic of „biases“ and its role in decision-making.", [[1,"Yes"],[2,"No"]])
 
@@ -352,7 +362,7 @@ class Player(BasePlayer):
 
     pqAC2=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I currently pay attention to the questions I am being asked in the survey.")
 
-    pq37=create_mc("I have already heard about Failure Awards and their role in decision-making.", [[1,"Yes"],[2,"No"]])
+    pq37=create_mc("I have already heard about Courage Awards and their role in decision-making.", [[1,"Yes"],[2,"No"]])
 
 
 
