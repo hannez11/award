@@ -195,20 +195,6 @@ PEQ1
 {% endif %}
 {% endfor %}
 
-{% for field in form %}
-{% if field.html_name == "pq16" %}
-<!-- otherwise timerfield is also displayed -->
-<div class="card bg-light m-3">
-  <div class="card-body">
-
-          <b>{{ field.label }}</b>
-          <hr>
-          {{ field }}
-
-        </div></div>    
-<br>      
-{% endif %}
-{% endfor %}
 
 {% for field in form %}
 {% if field.html_name == "pq17" %}
@@ -252,6 +238,21 @@ PEQ1
     </div>    
     
 <br>   
+{% endif %}
+{% endfor %}
+
+{% for field in form %}
+{% if field.html_name == "pq16" %}
+<!-- otherwise timerfield is also displayed -->
+<div class="card bg-light m-3">
+  <div class="card-body">
+
+          <b>{{ field.label }}</b>
+          <hr>
+          {{ field }}
+
+        </div></div>    
+<br>      
 {% endif %}
 {% endfor %}
 

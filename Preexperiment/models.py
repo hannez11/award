@@ -123,8 +123,6 @@ class Player(BasePlayer):
     variable_c_answers = models.StringField(initial="FirstTry")
 
     #timers
-    timer_lottery1 = models.StringField()
-    timer_lottery2 = models.StringField()
     timer_instructions = models.StringField()
     timer_quiz = models.StringField() # has to be a stringfield, since multiple attempts are possible which have to be stored in an array. intfields cant easily store arrays
     timer_initialdecision = models.StringField()
@@ -135,6 +133,10 @@ class Player(BasePlayer):
 
     start_mainpart = models.StringField() 
     end_mainpart = models.StringField() 
+    start_lottery = models.StringField() #drop criteria
+    end_lottery = models.StringField() 
+    start_failureaward = models.StringField() #drop criteria
+    end_failureaward = models.StringField() 
     start_peq = models.StringField()
     end_peq = models.StringField()
     start_instructions = models.StringField()
@@ -143,6 +145,15 @@ class Player(BasePlayer):
     end_initialdecision = models.StringField()
     start_total = models.StringField() #get time of participant when welcome page is loaded
     end_total = models.StringField() #get time of participant when last page is loaded
+
+    timespent_mainpart = models.IntegerField() #get total time spent
+    timespent_lottery = models.IntegerField()
+    timespent_failureaward = models.IntegerField()
+    timespent_peq = models.IntegerField()
+    timespent_instructions = models.IntegerField()
+    timespent_total = models.IntegerField()
+    timespent_initialdecision = models.IntegerField()
+
     def get_time(self, start_or_end): #specify pages.py, eg: before_next_page(self): self.player.get_time("end_mainpart")
         if start_or_end == "start_mainpart":
             self.start_mainpart = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
@@ -150,40 +161,50 @@ class Player(BasePlayer):
             self.end_mainpart = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
             difference = datetime.datetime.strptime(self.end_mainpart, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_mainpart, "%d/%m/%Y %H:%M:%S")
-            duration = difference.total_seconds()
-            self.timespent_mainpart = f"{float(duration):.0f}" #in minutes; for seconds: f"{duration:.0f}sec; {float(duration / 60):.2f}min"
+            self.timespent_mainpart = int(difference.total_seconds())
+            # self.timespent_mainpart = f"{float(duration):.0f}" #in minutes; for seconds: f"{duration:.0f}sec; {float(duration / 60):.2f}min"
         elif start_or_end == "start_peq":
             self.start_peq = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         elif start_or_end == "end_peq":
             self.end_peq = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
             difference = datetime.datetime.strptime(self.end_peq, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_peq, "%d/%m/%Y %H:%M:%S")
-            duration = difference.total_seconds()
-            self.timespent_peq = f"{float(duration):.0f}" 
+            self.timespent_peq = int(difference.total_seconds()) 
+        elif start_or_end == "start_lottery":
+            self.start_lottery = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        elif start_or_end == "end_lottery":
+            self.end_lottery = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+            difference = datetime.datetime.strptime(self.end_lottery, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_lottery, "%d/%m/%Y %H:%M:%S")
+            self.timespent_lottery = int(difference.total_seconds())
+        elif start_or_end == "start_failureaward":
+            self.start_failureaward = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        elif start_or_end == "end_failureaward":
+            self.end_failureaward = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+            difference = datetime.datetime.strptime(self.end_failureaward, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_failureaward, "%d/%m/%Y %H:%M:%S")
+            self.timespent_failureaward = int(difference.total_seconds())
         elif start_or_end == "start_instructions":
             self.start_instructions = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         elif start_or_end == "end_instructions":
             self.end_instructions = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
             difference = datetime.datetime.strptime(self.end_instructions, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_instructions, "%d/%m/%Y %H:%M:%S")
-            duration = difference.total_seconds()
-            self.timespent_instructions = f"{float(duration):.0f}" 
+            self.timespent_instructions = int(difference.total_seconds())
         elif start_or_end == "start_initialdecision":
             self.start_initialdecision = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         elif start_or_end == "end_initialdecision":
             self.end_initialdecision = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             
             difference = datetime.datetime.strptime(self.end_initialdecision, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_initialdecision, "%d/%m/%Y %H:%M:%S")
-            duration = difference.total_seconds()
-            self.timespent_initialdecision = f"{float(duration):.0f}" 
+            self.timespent_initialdecision = int(difference.total_seconds())
         elif start_or_end == "start_total":
             self.start_total = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         elif start_or_end == "end_total":
             self.end_total = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
             difference = datetime.datetime.strptime(self.end_total, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(self.start_total, "%d/%m/%Y %H:%M:%S")
-            duration = difference.total_seconds()
-            self.timespent_total = f"{float(duration):.0f}" 
+            self.timespent_total = int(difference.total_seconds())
 
 
     # def get_time2(self, start_end_variable): #e.g. self.player.get_time("start_total")
@@ -191,12 +212,6 @@ class Player(BasePlayer):
     #     start_end_variable = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     #     self.endtotal_total = start_end_variable
     #     print(f"model after {self.end_total}")
-
-    timespent_mainpart = models.StringField() #get total time spent
-    timespent_peq = models.StringField()
-    timespent_instructions = models.StringField()
-    timespent_total = models.StringField()
-    timespent_initialdecision = models.StringField()
 
     # def time_spent2(self, starttime, endtime, timespent_variable): #e.g. self.player.time_spent(self, start_mainpart, end_mainpart, timespent_mainpart)
     #     difference = datetime.datetime.strptime(endtime, "%d/%m/%Y %H:%M:%S") - datetime.datetime.strptime(starttime, "%d/%m/%Y %H:%M:%S")
@@ -218,7 +233,7 @@ class Player(BasePlayer):
 
     when_FA=create_mc("When do I receive a Failure Award?", [[1,"I will always receive a Failure Award with 100% certainty by the end of the experiment."],[2,"In case I keep investing in a failing project which ends up generating high returns."], [3,"In case I take value adding risks but my project ends up failing and I deliberately decide for project discontinuation."]])
 
-    definition=create_mc("How does CleverClean Inc. define a failing project?", [[1,"A project is defined as failing in case the management board itself announces that the project is failing."],[2,"A project is defined as failing if investing a dollar in this project creates lower expected returns than investing in alternative projects."], [3,"A project is defined as failing when it generates more expected value than initially predicted and more than the expected value of an alternative project."]])
+    definition=create_mc("How does CleverClean Inc. define a failing project?", [[1,"A project is defined as failing in case the management board itself announces that the project is failing."],[2,"A project is defined as failing if investing any additional dollar in this project creates lower expected returns than investing in alternative projects."], [3,"A project is defined as failing when it generates more expected value than initially predicted and more than the expected value of an alternative project."]])
 
     delay=create_mc("The possibility to receive a Failure Award...", [[1,"... decreases in case of delayed project discontinuation."],[2,"... increases in case of delayed project discontinuation."], [3,"... is independent of the timing of my discontinuation decision."]])
 
@@ -269,6 +284,10 @@ class Player(BasePlayer):
 
     pq10=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="The Failure Award motivated me to take risks.")
 
+    pq10_eleven_m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I very strongly preferred chosing Smart Mop Robot over Smart Vacuum Robot.") #see Fehrenbacher 2020 paper (description of the dependent variable)
+
+    pq10_eleven_v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I very strongly preferred chosing Smart Vacuum Robot over Smart Mop Robot.")
+
     pq11=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="In my role as a manager at CleverClean Inc. I had concerns about taking risks.")
 
     pq12m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I consider it as a failure to have originally invested in the project Smart Mop Robot.")
@@ -313,7 +332,7 @@ class Player(BasePlayer):
 
     pq29=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="It was important to me to achieve the highest possible compensation.")
 
-    pq30=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="Due to the Failure Award I put more focus on discovering possible failures.")
+    pq30=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="Due to the Failure Award I put more focus on discovering potential project flaws.") #wording changed 15th march
 
     pq31=create_mc("I have already heard about the topic of „biases“ and its role in decision-making.", [[1,"Yes"],[2,"No"]])
 
@@ -329,9 +348,9 @@ class Player(BasePlayer):
 
     pq36=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I often worry about what others think about me.")
 
-    pqAC1=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I have never used the Internet in my whole life.")
+    pqAC1=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I have used the Internet at least once in my life.") #attention check, reversed 15th march
 
-    pqAC2=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I currently don’t pay attention to the questions I am being asked in the survey.")
+    pqAC2=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I currently pay attention to the questions I am being asked in the survey.")
 
     pq37=create_mc("I have already heard about Failure Awards and their role in decision-making.", [[1,"Yes"],[2,"No"]])
 

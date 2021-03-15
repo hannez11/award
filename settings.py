@@ -32,9 +32,46 @@ SESSION_CONFIGS = [
 # the session config can be accessed from methods in your apps as self.session.config,
 # e.g. self.session.config['participation_fee']
 
-SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=1.23, doc=""
+mturk_hit_settings = dict(
+    keywords='bonus, study, training',
+    title='Experimental study on decision-making (approx. 45 minutes; $8 compensation on average)',
+    description='This HIT is a three-part study in which you play a lottery, receive a training as well as work on tasks concerning decision-making and then answer some personal questions. Requirements: Web browser must support the playback of videos and the concept of Net Present Value must be known (eligibility checks to both at the beginning); Mobile devices not allowed',
+    frame_height=500,
+    template='global/mturk_template.html',
+    minutes_allotted_per_assignment=120,
+    expiration_hours=7 * 24,
+    qualification_requirements=[
+   {
+        'QualificationTypeId': "00000000000000000071",
+        'Comparator': "EqualTo",
+        'LocaleValues': [{'Country': "US"}]
+    },
+    {
+        'QualificationTypeId': "3GNL8ZDCGCK9VB6Q1AXGLO7B64OOI5",
+        'Comparator': "DoesNotExist",
+    },
+            { # Worker_​NumberHITsApproved
+            'QualificationTypeId': "00000000000000000040",
+            'Comparator': "GreaterThan",
+            'IntegerValues': [100]
+            },
+   	{ # Worker_​NumberHITsApproved
+            'QualificationTypeId': "000000000000000000L0",
+            'Comparator': "GreaterThan",
+            'IntegerValues': [95]
+        },
+   
+    ],
+    grant_qualification_id='3GNL8ZDCGCK9VB6Q1AXGLO7B64OOI5', # to prevent retakes
 )
+
+SESSION_CONFIG_DEFAULTS = dict(
+    real_world_currency_per_point=1.00, participation_fee=1.23, doc="", mturk_hit_settings=mturk_hit_settings
+)
+
+# setting for integration with AWS Mturk
+AWS_ACCESS_KEY_ID = environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY')
 
 # ISO-639 code
 # for example: de, fr, ja, ko, zh-hans

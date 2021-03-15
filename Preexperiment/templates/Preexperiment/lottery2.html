@@ -11,6 +11,10 @@ Lottery task
 
 {% block content %}
 
+<div class="alert alert-primary" role="alert">
+  <div id="selectedscenario">Please choose a scenario.</div>
+</div>
+
 <table class="table table-striped table-hover table-sm" style="text-align:center;">
   <colgroup>
       <col width="33%">
@@ -50,9 +54,6 @@ Lottery task
 </table>
 
 <hr>
-<div class="alert alert-primary" role="alert">
-  <div id="selectedscenario">Please choose a scenario.</div>
-</div>
 
 <div class="row">
   <div class="col-md-3 offset-md-3"></div>
@@ -61,7 +62,7 @@ Lottery task
 
 </body>
 
-<input type="hidden" name="timer_lottery2" id="timer_lottery2" value=0>
+<!-- <input type="hidden" name="timer_lottery2" id="timer_lottery2" value=0> -->
 
   <script>
   
@@ -91,14 +92,14 @@ Lottery task
           }
     });
 
-    var sec = 0; // global variable
+    // var sec = 0; // global variable
     
-    // increasing timer
-    function pad ( val ) { return val > 9 ? val : "0" + val; }
-    setInterval( function(){
-        $("#seconds").html(pad(++sec));
-        $("#timer_lottery2").val(sec); // store seconds spent on page in hidden field
-    }, 1000);
+    // // increasing timer
+    // function pad ( val ) { return val > 9 ? val : "0" + val; }
+    // setInterval( function(){
+    //     $("#seconds").html(pad(++sec));
+    //     $("#timer_lottery2").val(sec); // store seconds spent on page in hidden field
+    // }, 1000);
   
   </script>
 

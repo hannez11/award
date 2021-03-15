@@ -1,0 +1,16 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block head_title %}
+Fail
+{% endblock %}
+
+{% block title %}
+Thank you very much for participating in our experiment.
+{% endblock %}
+
+{% block content %}
+<p>You answered the question "I have used the Internet at least once in my life." with {{ player.pqAC1 }} (completely disagree) and the question "I currently pay attention to the questions I am being asked in the survey." with {{ player.pqAC2 }} (completely disagree). 
+<br>For an attentive worker, it does not make any sense at all to disagree to these statements. Due to your strikingly inattentive behavior, you will not be able to complete the task. You accepted the rules of this HIT in the very beginning, which stated that you will not be compensated if inattentive behavior is detected. IMAGE</p>
+ 
+{% endblock %}
