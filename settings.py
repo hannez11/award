@@ -61,7 +61,7 @@ mturk_hit_settings = dict(
             'IntegerValues': [95]
         },
     ],
-    grant_qualification_id='32Z3R27HBQLVTMC8LX4UQJ6YSR7G0I', # to prevent retakes. create new qualification on mturk requester https://requester.mturk.com/qualification_types and copy paste
+    grant_qualification_id='32Z3R27HBQLVTMC8LX4UQJ6YSR7G0I', # RS account. to prevent retakes. create new qualification on mturk requester https://requester.mturk.com/qualification_types and copy paste
 )
 
 SESSION_CONFIG_DEFAULTS = dict(
