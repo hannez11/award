@@ -33,8 +33,8 @@ class Constants(BaseConstants):
     lottery_failure = 0.00
     lottery_safe = 0.75
 
-    alternative1_boni = 6.80
-    alternative1_boni_control = 7.00
+    alternative1_boni = 5.80
+    alternative1_boni_control = 6.00
     success_boni = 7 #CORRECT? based on second update. DIE ERWARTUNGSVERGUETUNG BASIEREND DARAUF BERECHNET?
     failure_boni = 3
     alternative2_boni = 4.80
