@@ -13,7 +13,7 @@ Thank you very much for participating in our experiment.
 
 {% if player.timespent_lottery is not None and player.timespent_lottery < 30 %}
 <p>You spent less than {{ player.timespent_lottery}} seconds on the lottery task, which is significantly less than the bare minimum to accurately understand and answer the task. Due to your strikingly inattentive behavior, you will not be able to complete the task. You accepted the rules of this HIT in the very beginning, which stated that you will not be compensated if inattentive behavior is detected.</p>
-{% elif player.timespent_instructions is not None and player.timespent_instructions < 70 %}
+{% elif player.timespent_instructions is not None and player.timespent_instructions < 60 %}
 <p>You spent less than {{ player.timespent_instructions}} seconds on the instructions page, which is significantly less than the bare minimum to accurately understand and answer the task. Due to your strikingly inattentive behavior, you will not be able to complete the task. You accepted the rules of this HIT in the very beginning, which stated that you will not be compensated if inattentive behavior is detected.</p>
 {% elif player.timespent_failureaward is not None and player.timespent_failureaward < 50 %}
 <p>You spent less than {{ player.timespent_failureaward}} seconds on the previous page, which is significantly less than the bare minimum to accurately understand and answer the task. Due to your strikingly inattentive behavior, you will not be able to complete the task. You accepted the rules of this HIT in the very beginning, which stated that you will not be compensated if inattentive behavior is detected.</p>
@@ -21,7 +21,7 @@ Thank you very much for participating in our experiment.
 <p>You made {{ player.quiz_totalwronganswers}} mistakes on the quiz questions which indicates that you did not fully understand the instructions. Due to your strikingly inattentive behavior, you will not be able to complete the task. You accepted the rules of this HIT in the very beginning, which stated that you will not be compensated if inattentive behavior is detected.</p>
 {% elif player.timespent_initialdecision is not None and player.timespent_initialdecision < 40 %}
 <p>You spent less than {{ player.timespent_initialdecision}} seconds on the previous page, which is significantly less than the bare minimum to accurately understand and answer the task. Due to your strikingly inattentive behavior, you will not be able to complete the task. You accepted the rules of this HIT in the very beginning, which stated that you will not be compensated if inattentive behavior is detected.</p>
-{% elif player.timespent_projectupdate is not None and player.timespent_projectupdate < 90 %}
+{% elif player.timespent_projectupdate is not None and player.timespent_projectupdate < 80 %}
 <p>You spent less than {{ player.timespent_projectupdate}} seconds on the previous page, which is significantly less than the bare minimum to accurately understand and answer the task. Due to your strikingly inattentive behavior, you will not be able to complete the task. You accepted the rules of this HIT in the very beginning, which stated that you will not be compensated if inattentive behavior is detected.</p>
 {% elif player.prizewheel != 3 %}
 Unfortunately you do not meet the required qualifications for this experiment. Because of this, the experiment is now over for you.<br> As already mentioned in the introduction, you do not receive any compensation for this HIT.

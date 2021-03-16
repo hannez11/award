@@ -26,25 +26,25 @@ class fail(Page): #or conditions
     def is_displayed(self):
         return (self.player.prizewheel!=3 or
         (self.player.timespent_lottery is not None and self.player.timespent_lottery < 30) or #30 secs
-        (self.player.timespent_instructions is not None and self.player.timespent_instructions < 70) or #70 secs
+        (self.player.timespent_instructions is not None and self.player.timespent_instructions < 60) or #60 secs
         (self.player.timespent_failureaward is not None and self.player.timespent_failureaward < 50) or #50 secs
         (self.player.quiz_totalwronganswers is not None and self.player.quiz_totalwronganswers >= 15) or # ANPASSEN
         (self.player.timespent_initialdecision is not None and self.player.timespent_initialdecision < 40) or #40 secs
-        (self.player.timespent_projectupdate is not None and self.player.projectupdate < 90) #90 secs
+        (self.player.timespent_projectupdate is not None and self.player.timespent_projectupdate < 80) #80 secs
         )
 
 class fail_peq(Page): #both attention checks <= 2 AND several peqs answered exactly the same. 
     def is_displayed(self):
         if self.subsession.framing in {"A1", "A2", "A3"}:
-            return (self.player.pqAC1 <= 2 and self.player.pqAC2 <= 2 and
+            return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3 and
             (self.player.pq23 == self.player.pq26 == self.player.pq24 == self.player.pq27) #bunch of peqs answered identically (non-control groups)
             )
         elif self.player.initial_decision == "Mop Robot" and self.subsession.framing == "C0":
-            return (self.player.pqAC1 <= 2 and self.player.pqAC2 <= 2 and
+            return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3 and
             (self.player.pq12m == self.player.pq13 == self.player.pq14m == self.player.pq15m == self.player.pq17) #mop control
             )
         elif self.player.initial_decision == "Vacuum Robot" and self.subsession.framing == "C0":
-            return (self.player.pqAC1 <= 2 and self.player.pqAC2 <= 2 and
+            return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3 and
             (self.player.pq12v == self.player.pq13 == self.player.pq14v == self.player.pq15v == self.player.pq17) #vacuum control
             )
 
@@ -418,16 +418,19 @@ class Project_2_A1(Page):
 class Project_2_A2(Page):
     def is_displayed(self):
         return self.subsession.framing == "A2" 
+    def before_next_page(self):
         self.player.get_time("end_initialdecision")
 
 class Project_2_A3(Page):
     def is_displayed(self):
         return self.subsession.framing == "A3" 
+    def before_next_page(self):
         self.player.get_time("end_initialdecision")
 
 class Project_2_Control(Page):
     def is_displayed(self):
         return self.subsession.framing == "C0" 
+    def before_next_page(self):
         self.player.get_time("end_initialdecision")
 
 class FA_1(Page):
@@ -527,7 +530,8 @@ class PEQ_1v_control(Page):
         return self.player.initial_decision == "Vacuum Robot" and self.subsession.framing == "C0" 
 
 class OneYear_later(Page):
-    pass
+    def before_next_page(self):
+        self.player.get_time("start_projectupdate")
 
 class Project_update_FA_decision_A1(Page):
     form_model = "player"
@@ -536,6 +540,7 @@ class Project_update_FA_decision_A1(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision'] = self.player.sub_decision #set global so can be used in the next app
+        self.player.get_time("end_projectupdate")
 
     def is_displayed(self):
         return self.subsession.framing == "A1"   
@@ -547,6 +552,7 @@ class Project_update_FA_decision_A2(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision'] = self.player.sub_decision #set global so can be used in the next app
+        self.player.get_time("end_projectupdate")
 
     def is_displayed(self):
         return self.subsession.framing == "A2" 
@@ -559,6 +565,7 @@ class Project_update_FA_decision_A3(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision'] = self.player.sub_decision #set global so can be used in the next app
+        self.player.get_time("end_projectupdate")
 
     def is_displayed(self):
         return self.subsession.framing == "A3" 
@@ -570,6 +577,7 @@ class Project_update_Control_decision(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision'] = self.player.sub_decision #set global so can be used in the next app
+        self.player.get_time("end_projectupdate")
     
     def is_displayed(self):
         return self.subsession.framing == "C0" 
@@ -601,8 +609,6 @@ class PEQ_2_FA(Page):
 class Twoyears_later(Page):
     def is_displayed(self):
         return self.player.sub1_decision != "terminate"
-    def before_next_page(self):
-        self.player.get_time("start_projectupdate")
 
 class Project_update_FA_2_decision_A1(Page):
     form_model = "player"
@@ -611,7 +617,6 @@ class Project_update_FA_2_decision_A1(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision2'] = self.player.sub_decision2 #set global so can be used in the next app
-        self.player.get_time("end_projectupdate")
 
     def is_displayed(self):
         return self.player.sub1_decision != "terminate" and self.subsession.framing == "A1"
@@ -623,7 +628,6 @@ class Project_update_FA_2_decision_A2(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision'] = self.player.sub_decision #set global so can be used in the next app
-        self.player.get_time("end_projectupdate")
     
     def is_displayed(self):
         return self.player.sub1_decision != "terminate" and self.subsession.framing == "A2"
@@ -636,7 +640,6 @@ class Project_update_FA_2_decision_A3(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision'] = self.player.sub_decision #set global so can be used in the next app
-        self.player.get_time("end_projectupdate")
     
     def is_displayed(self):
         return self.player.sub1_decision != "terminate" and self.subsession.framing == "A3"
@@ -649,7 +652,6 @@ class Project_update_Control_2_decision(Page):
     #determine subsequent decision bonus payments
     def before_next_page(self):
         self.participant.vars['sub_decision'] = self.player.sub_decision #set global so can be used in the next app
-        self.player.get_time("end_projectupdate")
     
     def is_displayed(self):
         return self.player.sub1_decision != "terminate" and self.subsession.framing == "C0"
