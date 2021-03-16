@@ -34,8 +34,8 @@ SESSION_CONFIGS = [
 
 mturk_hit_settings = dict(
     keywords='bonus, study, training',
-    title='Experimental study on decision-making (approx. 45 minutes; $8 compensation on average)',
-    description='This HIT is a three-part study in which you play a lottery, receive a training as well as work on tasks concerning decision-making and then answer some personal questions. Requirements: Web browser must support the playback of videos and the concept of Net Present Value must be known (eligibility checks to both at the beginning); Mobile devices not allowed',
+    title='Experimental study on decision-making (approx. 40 minutes; $7 compensation on average)',
+    description='This HIT is a three-part study in which you 1) play a lottery 2) work on tasks concerning decision-making 3) answer a few concluding questions.',
     frame_height=500,
     template='global/mturk_template.html',
     minutes_allotted_per_assignment=120,
@@ -47,7 +47,7 @@ mturk_hit_settings = dict(
         'LocaleValues': [{'Country': "US"}]
     },
     {
-        'QualificationTypeId': "3GNL8ZDCGCK9VB6Q1AXGLO7B64OOI5",
+        'QualificationTypeId': "32Z3R27HBQLVTMC8LX4UQJ6YSR7G0I", #retake qualifaction ID
         'Comparator': "DoesNotExist",
         },
             { # Worker_​NumberHITsApproved
@@ -61,11 +61,11 @@ mturk_hit_settings = dict(
             'IntegerValues': [95]
         },
     ],
-    grant_qualification_id='3GNL8ZDCGCK9VB6Q1AXGLO7B64OOI5', # to prevent retakes. create new qualification and copy paste
+    grant_qualification_id='32Z3R27HBQLVTMC8LX4UQJ6YSR7G0I', # to prevent retakes. create new qualification on mturk requester https://requester.mturk.com/qualification_types and copy paste
 )
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=1.23, doc="", mturk_hit_settings=mturk_hit_settings
+    real_world_currency_per_point=1.00, participation_fee=1.55, doc="", mturk_hit_settings=mturk_hit_settings
 )
 
 # setting for integration with AWS Mturk
