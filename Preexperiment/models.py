@@ -33,13 +33,13 @@ class Constants(BaseConstants):
     lottery_failure = 0.00
     lottery_safe = 0.75
 
-    alternative1_boni = 5.80
+    alternative1_boni = 5.80 #first subsequent decision (termination)
     alternative1_boni_control = 6.00
-    success_boni = 7 #CORRECT? based on second update. DIE ERWARTUNGSVERGUETUNG BASIEREND DARAUF BERECHNET?
+    success_boni = 7 #second subsequent decision (continuation, twice)
     failure_boni = 3
-    alternative2_boni = 4.80
+    alternative2_boni = 4.80 #second subsequent decision (continuation then termination)
     alternative2_boni_control = 4.90
-    failure_award = 0.20
+    failure_award = 0.20 #50% for termination at 2nd subsequent decision (see pages.py)
 
 class Subsession(BaseSubsession):
     framing = models.StringField() # A1/A2/A3/C0
@@ -254,11 +254,11 @@ class Player(BasePlayer):
 
     compensation_Co = models.StringField(widget=forms.widgets.CheckboxSelectMultiple(choices=[["1","Fixed payment"],["2","Lottery payout"], ["3","Variable compensation from the main task"], ["4","A monetary bonus"]]), label="What are the components of your total compensation? (please select all applicable boxes)")
 
-    example = models.StringField(label="In the following example, what is the project's outcome after it is completed (in million Lira)?")
+    example = models.StringField(label="In the following example, what is the project account balance after project completion (in million Lira)?")
 
-    variable = models.StringField(label="How much is your variable compensation in Lira if the project's outcome is 5 million Lira and you qualify to receive a Courage Award with a budget of 0.2m Lira?")
+    variable = models.StringField(label="How much is your variable compensation in Lira if the project account balance is 5m Lira and you qualify to receive a Courage Award with a budget of 0.2m Lira?")
 
-    variable_c = models.StringField(label="How much is your variable compensation in Lira if the project's outcome is 5 million Lira after the completion of the project?")
+    variable_c = models.StringField(label="How much is your variable compensation in Lira if the project account balance is 5m Lira after the completion of the project?")
 
     dollars = models.StringField(label="How many Dollars equal 35,000 Lira?")
 
@@ -284,7 +284,7 @@ class Player(BasePlayer):
 
     pq7v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I feel that choosing the Smart Vacuum Robot project is…")
 
-    pq8v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I am convinced, that my chosen project Smart Vacuum Robot will be successful.")
+    pq8v=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I am convinced that my chosen project Smart Vacuum Robot will be successful.")
 
     pq8m=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I am convinced that my chosen project Smart Mop Robot will be successful.")
 
@@ -362,9 +362,10 @@ class Player(BasePlayer):
 
     pqAC2=models.IntegerField(widget=widgets.RadioSelect, choices=[1,2,3,4,5,6,7], label="I currently pay attention to the questions I am being asked in the survey.")
 
-    pq37=create_mc("I have already heard about Courage Awards and their role in decision-making.", [[1,"Yes"],[2,"No"]])
+    pq37=create_mc("I have already heard about Courage Awards (also known as Failure Awards) and their role in decision-making.", [[1,"Yes"],[2,"No"]])
 
 
+    attention_failed = models.StringField()
 
 #Demographics 
 

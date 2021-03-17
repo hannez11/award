@@ -34,7 +34,7 @@ SESSION_CONFIGS = [
 
 mturk_hit_settings = dict(
     keywords='bonus, study, training',
-    title='Experimental study on decision-making (approx. 40 minutes; $7 compensation on average)',
+    title='Experimental study on decision-making (approx. 40 minutes; $7.50 compensation on average)',
     description='This HIT is a three-part study in which you 1) play a lottery 2) work on tasks concerning decision-making 3) answer a few concluding questions.',
     frame_height=500,
     template='global/mturk_template.html',

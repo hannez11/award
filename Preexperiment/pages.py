@@ -22,31 +22,55 @@ class prizewheel(Page):
     #     print(self.player.start_instructions)
     #     self.player.get_time(self.player.start_instructions) #get start time
 
-class fail(Page): #or conditions
+class fail(Page): #DEACTIVATED for testing
     def is_displayed(self):
         return (self.player.prizewheel!=3 or
         (self.player.timespent_lottery is not None and self.player.timespent_lottery < 0) or #30 secs
         (self.player.timespent_instructions is not None and self.player.timespent_instructions < 0) or #60 secs
-        (self.player.timespent_failureaward is not None and self.player.timespent_failureaward < 00) or #50 secs
-        (self.player.quiz_totalwronganswers is not None and self.player.quiz_totalwronganswers >= 15) or # ANPASSEN
+        (self.player.timespent_failureaward is not None and self.player.timespent_failureaward < 0) or #50 secs
+        (self.player.quiz_totalwronganswers is not None and self.player.quiz_totalwronganswers >= 15) or # ANPASSEN NACH UNTEN FÜR STRENGER
         (self.player.timespent_initialdecision is not None and self.player.timespent_initialdecision < 0) or #40 secs
         (self.player.timespent_projectupdate is not None and self.player.timespent_projectupdate < 0) #80 secs
         )
+# class fail(Page): #or conditions for mturk
+#     def is_displayed(self):
+#         return (self.player.prizewheel!=3 or
+#         (self.player.timespent_lottery is not None and self.player.timespent_lottery < 30) or #30 secs
+#         (self.player.timespent_instructions is not None and self.player.timespent_instructions < 60) or #60 secs
+#         (self.player.timespent_failureaward is not None and self.player.timespent_failureaward < 50) or #50 secs
+#         (self.player.quiz_totalwronganswers is not None and self.player.quiz_totalwronganswers >= 15) or # ANPASSEN
+#         (self.player.timespent_initialdecision is not None and self.player.timespent_initialdecision < 40) or #40 secs
+#         (self.player.timespent_projectupdate is not None and self.player.timespent_projectupdate < 80) #80 secs
+#         )
 
-class fail_peq(Page): #both attention checks <= 2 AND several peqs answered exactly the same. 
+class fail_peq(Page): #both attention checks <= 3. Participants can still continue if they want to risk a rejection. check in data for these people
     def is_displayed(self):
         if self.subsession.framing in {"A1", "A2", "A3"}:
-            return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3 and
-            (self.player.pq23 == self.player.pq26 == self.player.pq24 == self.player.pq27) #bunch of peqs answered identically (non-control groups)
-            )
+            return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3)
         elif self.player.initial_decision == "Mop Robot" and self.subsession.framing == "C0":
-            return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3 and
-            (self.player.pq12m == self.player.pq13 == self.player.pq14m == self.player.pq15m == self.player.pq17) #mop control
-            )
+            return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3)
         elif self.player.initial_decision == "Vacuum Robot" and self.subsession.framing == "C0":
-            return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3 and
-            (self.player.pq12v == self.player.pq13 == self.player.pq14v == self.player.pq15v == self.player.pq17) #vacuum control
-            )
+            return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3)
+
+    def before_next_page(self):
+        self.player.attention_failed = f"Both attention checks failed with {self.player.pqAC1} and {self.player.pqAC2}"
+
+# class fail_peq(Page): #both attention checks <= 2 AND several peqs answered exactly the same. 
+#     def is_displayed(self):
+#         if self.subsession.framing in {"A1", "A2", "A3"}:
+#             return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3 and
+#             (self.player.pq23 == self.player.pq26 == self.player.pq24 == self.player.pq27) #bunch of peqs answered identically (non-control groups)
+#             )
+#         elif self.player.initial_decision == "Mop Robot" and self.subsession.framing == "C0":
+#             return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3 and
+#             (self.player.pq12m == self.player.pq13 == self.player.pq14m == self.player.pq15m == self.player.pq17) #mop control
+#             )
+#         elif self.player.initial_decision == "Vacuum Robot" and self.subsession.framing == "C0":
+#             return (self.player.pqAC1 <= 3 and self.player.pqAC2 <= 3 and
+#             (self.player.pq12v == self.player.pq13 == self.player.pq14v == self.player.pq15v == self.player.pq17) #vacuum control
+#             )
+    # def before_next_page(self):
+    #     self.player.attention_failed = f"Both attention checks failed with {self.player.pqAC1} and {self.player.pqAC2}"
 
 class overview(Page):
     pass
@@ -86,6 +110,8 @@ class Experiment_instructions_A1(Page):
         self.player.get_time("start_failureaward")
 
 class Experiment_instructions_A2(Page):
+    form_model = "player"
+    form_fields = ["timer_instructions"]
     def is_displayed(self):
         return self.subsession.framing == "A2" 
     def before_next_page(self):
@@ -93,6 +119,8 @@ class Experiment_instructions_A2(Page):
         self.player.get_time("start_failureaward")
 
 class Experiment_instructions_A3(Page):
+    form_model = "player"
+    form_fields = ["timer_instructions"]
     def is_displayed(self):
         return self.subsession.framing == "A3" 
     def before_next_page(self):
@@ -100,6 +128,8 @@ class Experiment_instructions_A3(Page):
         self.player.get_time("start_failureaward")
 
 class Experiment_instructions_Control(Page):
+    form_model = "player"
+    form_fields = ["timer_instructions"]
     def is_displayed(self):
         return self.subsession.framing == "C0" 
     def before_next_page(self):
@@ -145,68 +175,68 @@ class Quiz_FA_1(Page):
         if value != 3:
             self.player.first_task_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def feedback_error_message(self, value):
         # print('value is', value)
         if value != 1:
             self.player.feedback_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def manipulation_A1_error_message(self, value):
         # print('value is', value)
         if value != 2:
             self.player.manipulation_A1_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def when_FA_error_message(self, value):
         # print('value is', value)
         if value != 3:
             self.player.when_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def example_error_message(self, value):
         # print('value is', value, type(value))
-        if not (value[0:3] == "1,0" or value == "1" or value[0:3] == "1.0"):
+        if not (value[0:3] == "6,0" or value == "6" or value[0:3] == "6.0"):
             self.player.example_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def variable_error_message(self, value):
         # print('value is', value)
         if not (value == "52000" or value == "52000,00" or value == "52000,0" or value == "52.000"):
             self.player.variable_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def dollars_error_message(self, value):
         # print('value is', value)
         if not (value[0:4] == "3,50" or value == "3,5" or value == "3.50" or value == "3.5"):
             self.player.dollars_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def definition_error_message(self, value):
         # print('value is', value)
         if value != 2:
             self.player.definition_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def delay_error_message(self, value):
         # print('value is', value)
         if value != 1:
             self.player.delay_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def what_FA_error_message(self, value):
         # print('value is', value)
         if value != 2:
             self.player.what_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
    
     def compensation_FA_error_message(self, value):
         # print('value is', value)
         if value != "['1', '2', '3', '4']":
             self.player.compensation_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
 
     def is_displayed(self):
         return self.subsession.framing == "A1" 
@@ -220,67 +250,67 @@ class Quiz_FA_2(Page):
         if value != 3:
             self.player.first_task_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def feedback_error_message(self, value):
         # print('value is', value)
         if value != 1:
             self.player.feedback_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def manipulation_A2_error_message(self, value):
         # print('value is', value)
         if value != 2:
             self.player.manipulation_A2_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def when_FA_error_message(self, value):
         # print('value is', value)
         if value != 3:
             self.player.when_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def example_error_message(self, value):
         # print('value is', value, type(value))
-        if not (value[0:3] == "1,0" or value == "1" or value[0:3] == "1.0"):
+        if not (value[0:3] == "6,0" or value == "6" or value[0:3] == "6.0"):
             self.player.example_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def variable_error_message(self, value):
         # print('value is', value)
         if not (value == "52000" or value == "52000,00" or value == "52000,0" or value == "52.000"):
             self.player.variable_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def dollars_error_message(self, value):
         # print('value is', value)
         if not (value[0:4] == "3,50" or value == "3,5" or value == "3.50" or value == "3.5"):
             self.player.dollars_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def definition_error_message(self, value):
         # print('value is', value)
         if value != 2:
             self.player.definition_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def delay_error_message(self, value):
         # print('value is', value)
         if value != 1:
             self.player.delay_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def what_FA_error_message(self, value):
         # print('value is', value)
         if value != 2:
             self.player.what_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'   
+            return 'Your answer is not correct. Please read the experimental instructions again.'   
     def compensation_FA_error_message(self, value):
         # print('value is', value)
         if value != "['1', '2', '3', '4']":
             self.player.compensation_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
 
     def is_displayed(self):
         return self.subsession.framing == "A2" 
@@ -294,67 +324,67 @@ class Quiz_FA_3(Page):
         if value != 3:
             self.player.first_task_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def feedback_error_message(self, value):
         # print('value is', value)
         if value != 1:
             self.player.feedback_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def manipulation_A3_error_message(self, value):
         # print('value is', value)
         if value != 2:
             self.player.manipulation_A3_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def when_FA_error_message(self, value):
         # print('value is', value)
         if value != 3:
             self.player.when_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def example_error_message(self, value):
         # print('value is', value, type(value))
-        if not (value[0:3] == "1,0" or value == "1" or value[0:3] == "1.0" or value == "1.0m"):
+        if not (value[0:3] == "6,0" or value == "6" or value[0:3] == "6.0" or value == "6.0m"):
             self.player.example_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def variable_error_message(self, value):
         # print('value is', value)
         if not (value == "52000" or value == "52000,00" or value == "52000,0" or value == "52.000"):
             self.player.variable_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def dollars_error_message(self, value):
         # print('value is', value)
         if not (value[0:4] == "3,50" or value == "3,5" or value == "3.50" or value == "3.5" or value == "$3.5" or value == "$3.50"):
             self.player.dollars_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def definition_error_message(self, value):
         # print('value is', value)
         if value != 2:
             self.player.definition_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def delay_error_message(self, value):
         # print('value is', value)
         if value != 1:
             self.player.delay_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def what_FA_error_message(self, value):
         # print('value is', value)
         if value != 2:
             self.player.what_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def compensation_FA_error_message(self, value):
         # print('value is', value)
         if value != "['1', '2', '3', '4']":
             self.player.compensation_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     
     def is_displayed(self):
         return self.subsession.framing == "A3" 
@@ -368,37 +398,37 @@ class Quiz_Control(Page):
         if value != 3:
             self.player.first_task_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def feedback_error_message(self, value):
         # print('value is', value)
         if value != 1:
             self.player.feedback_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def example_error_message(self, value):
         # print('value is', value, type(value))
-        if not (value[0:3] == "1,0" or value == "1" or value[0:3] == "1.0"):
+        if not (value[0:3] == "6,0" or value == "6" or value[0:3] == "6.0"):
             self.player.example_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def variable_c_error_message(self, value):
         # print('value is', value)
         if not (value == "50000" or value == "50000,00" or value == "50000,0" or value == "50.000"):
             self.player.variable_c_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def dollars_error_message(self, value):
         # print('value is', value)
         if not (value[0:4] == "3,50" or value == "3,5" or value == "3.50" or value == "3.5"):
             self.player.dollars_answers += ", " + value
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     def compensation_Co_error_message(self, value):
         # print('value is', value)
         if value != "['1', '2', '3']":
             self.player.compensation_FA_answers += ", " + str(value)
             self.player.quiz_totalwronganswers += 1
-            return 'Your answer is not correct. Please read the experiment instructions again.'
+            return 'Your answer is not correct. Please read the experimental instructions again.'
     
     def is_displayed(self):
         return self.subsession.framing == "C0" 
@@ -929,10 +959,10 @@ class End(Page):
     pass
 
 #test sequence
-# page_sequence = [welcome, prizewheel, fail, overview, lottery1, lottery2, fail, after_lottery, Experiment_instructions_A1, Experiment_instructions_A2, Experiment_instructions_A3, Experiment_instructions_Control, fail, FailureAward_A1, FailureAward_A2, FailureAward_A3, fail, FailureAward_2_A1, FailureAward_2_A2, FailureAward_2_A3, Quiz_completed, Project_2_A1, Project_2_A2, Project_2_A3, Project_2_Control, fail, FA_1, FA_2, FA_3, FA_Control, Decision_1_A1, Decision_1_A2, Decision_1_A3, Decision_1_Control, PEQ_1m, PEQ_1v, PEQ_1m_control, PEQ_1v_control, OneYear_later, Project_update_FA_decision_A1, Project_update_FA_decision_A2, Project_update_FA_decision_A3, Project_update_Control_decision, fail, PEQ_2_FA, Decision_2YesNo, Twoyears_later, Project_update_FA_2_decision_A1, Project_update_FA_2_decision_A2, Project_update_FA_2_decision_A3, Project_update_Control_2_decision, Decision_3YesNo, PEQ_Intro, PEQ_FA_m1, PEQ_FA_m2, PEQ_FA_m3, PEQ_FA_m4, PEQ_FA_m5, PEQ_FA_m6, PEQ_FA_v1, PEQ_FA_v2, PEQ_FA_v3, PEQ_FA_v4, PEQ_FA_v5, PEQ_FA_v6, PEQ_Control_m1, PEQ_Control_m2, PEQ_Control_m3, PEQ_Control_m4, PEQ_Control_m5, PEQ_Control_m6, PEQ_Control_v1, PEQ_Control_v2, PEQ_Control_v3, PEQ_Control_v4, PEQ_Control_v5, PEQ_Control_v6, fail_peq, demographics, Compensation_FA, End]
+page_sequence = [welcome, prizewheel, fail, overview, lottery1, lottery2, fail, after_lottery, Experiment_instructions_A1, Experiment_instructions_A2, Experiment_instructions_A3, Experiment_instructions_Control, fail, FailureAward_A1, FailureAward_A2, FailureAward_A3, fail, FailureAward_2_A1, FailureAward_2_A2, FailureAward_2_A3, Quiz_completed, Project_2_A1, Project_2_A2, Project_2_A3, Project_2_Control, fail, FA_1, FA_2, FA_3, FA_Control, Decision_1_A1, Decision_1_A2, Decision_1_A3, Decision_1_Control, PEQ_1m, PEQ_1v, PEQ_1m_control, PEQ_1v_control, OneYear_later, Project_update_FA_decision_A1, Project_update_FA_decision_A2, Project_update_FA_decision_A3, Project_update_Control_decision, fail, PEQ_2_FA, Decision_2YesNo, Twoyears_later, Project_update_FA_2_decision_A1, Project_update_FA_2_decision_A2, Project_update_FA_2_decision_A3, Project_update_Control_2_decision, Decision_3YesNo, PEQ_Intro, PEQ_FA_m1, PEQ_FA_m2, PEQ_FA_m3, PEQ_FA_m4, PEQ_FA_m5, PEQ_FA_m6, PEQ_FA_v1, PEQ_FA_v2, PEQ_FA_v3, PEQ_FA_v4, PEQ_FA_v5, PEQ_FA_v6, PEQ_Control_m1, PEQ_Control_m2, PEQ_Control_m3, PEQ_Control_m4, PEQ_Control_m5, PEQ_Control_m6, PEQ_Control_v1, PEQ_Control_v2, PEQ_Control_v3, PEQ_Control_v4, PEQ_Control_v5, PEQ_Control_v6, fail_peq, demographics, Compensation_FA, End]
 
 #complete page seq
-page_sequence = [welcome, prizewheel, fail, overview, lottery1, lottery2, fail, after_lottery, Experiment_instructions_A1, Experiment_instructions_A2, Experiment_instructions_A3, Experiment_instructions_Control, fail, FailureAward_A1, FailureAward_A2, FailureAward_A3, fail, FailureAward_2_A1, FailureAward_2_A2, FailureAward_2_A3, Quiz_FA_1, Quiz_FA_2, Quiz_FA_3, Quiz_Control, fail, Quiz_completed, Project_2_A1, Project_2_A2, Project_2_A3, Project_2_Control, fail, FA_1, FA_2, FA_3, FA_Control, Decision_1_A1, Decision_1_A2, Decision_1_A3, Decision_1_Control, PEQ_1m, PEQ_1v, PEQ_1m_control, PEQ_1v_control, OneYear_later, Project_update_FA_decision_A1, Project_update_FA_decision_A2, Project_update_FA_decision_A3, Project_update_Control_decision, fail, PEQ_2_FA, Decision_2YesNo, Twoyears_later, Project_update_FA_2_decision_A1, Project_update_FA_2_decision_A2, Project_update_FA_2_decision_A3, Project_update_Control_2_decision, Decision_3YesNo, PEQ_Intro, PEQ_FA_m1, PEQ_FA_m2, PEQ_FA_m3, PEQ_FA_m4, PEQ_FA_m5, PEQ_FA_m6, PEQ_FA_v1, PEQ_FA_v2, PEQ_FA_v3, PEQ_FA_v4, PEQ_FA_v5, PEQ_FA_v6, PEQ_Control_m1, PEQ_Control_m2, PEQ_Control_m3, PEQ_Control_m4, PEQ_Control_m5, PEQ_Control_m6, PEQ_Control_v1, PEQ_Control_v2, PEQ_Control_v3, PEQ_Control_v4, PEQ_Control_v5, PEQ_Control_v6, fail_peq, demographics, Compensation_FA, End]
+# page_sequence = [welcome, prizewheel, fail, overview, lottery1, lottery2, fail, after_lottery, Experiment_instructions_A1, Experiment_instructions_A2, Experiment_instructions_A3, Experiment_instructions_Control, fail, FailureAward_A1, FailureAward_A2, FailureAward_A3, fail, FailureAward_2_A1, FailureAward_2_A2, FailureAward_2_A3, Quiz_FA_1, Quiz_FA_2, Quiz_FA_3, Quiz_Control, fail, Quiz_completed, Project_2_A1, Project_2_A2, Project_2_A3, Project_2_Control, fail, FA_1, FA_2, FA_3, FA_Control, Decision_1_A1, Decision_1_A2, Decision_1_A3, Decision_1_Control, PEQ_1m, PEQ_1v, PEQ_1m_control, PEQ_1v_control, OneYear_later, Project_update_FA_decision_A1, Project_update_FA_decision_A2, Project_update_FA_decision_A3, Project_update_Control_decision, fail, PEQ_2_FA, Decision_2YesNo, Twoyears_later, Project_update_FA_2_decision_A1, Project_update_FA_2_decision_A2, Project_update_FA_2_decision_A3, Project_update_Control_2_decision, Decision_3YesNo, PEQ_Intro, PEQ_FA_m1, PEQ_FA_m2, PEQ_FA_m3, PEQ_FA_m4, PEQ_FA_m5, PEQ_FA_m6, PEQ_FA_v1, PEQ_FA_v2, PEQ_FA_v3, PEQ_FA_v4, PEQ_FA_v5, PEQ_FA_v6, PEQ_Control_m1, PEQ_Control_m2, PEQ_Control_m3, PEQ_Control_m4, PEQ_Control_m5, PEQ_Control_m6, PEQ_Control_v1, PEQ_Control_v2, PEQ_Control_v3, PEQ_Control_v4, PEQ_Control_v5, PEQ_Control_v6, fail_peq, demographics, Compensation_FA, End]
 
 #compensation check
 # page_sequence = [lottery1, lottery2, Decision_1_A1, Project_update_FA_decision_A1, Decision_2YesNo, Project_update_FA_2_decision_A1, Decision_3YesNo, PEQ_Intro, Compensation_FA]
